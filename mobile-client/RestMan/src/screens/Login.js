@@ -20,9 +20,10 @@ const styles = {
     backgroundColor: '#4EA384',
   },
   welcome: {
-    fontSize: 40,
+    fontSize: 30,
     textAlign: 'center',
     margin: 10,
+    marginTop: 60,
     fontWeight: 'bold',
     color: 'white'
   }
@@ -57,7 +58,11 @@ class Login extends React.Component {
       // .catch(err => console.log(err))
 
       // mockup data
-      
+      let user = {
+        username: self.state.username,
+        role: 'waiter'
+      }
+      alert(JSON.stringify(user))
     }
   }
 
@@ -76,6 +81,7 @@ class Login extends React.Component {
             onChangeText={(text) => this.setState({ password: text })}
             value={ this.state.password }
             style={{ width: 300 }}
+            secureTextEntry={true}
             placeholder='Password'
           />
         </View>
