@@ -22,3 +22,10 @@ export const getMenus = dispatch => {
     })
   })
 }
+
+export const addOrder = (orders) => {
+  return {
+    type: 'ADD_TO_ORDER',
+    payload: orders
+  }
+}

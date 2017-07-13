@@ -13,6 +13,8 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 
+import { addOrder } from '../actions'
+
 const { height, width } = Dimensions.get('window')
 const cardHeight = 0.1 * height
 const cardWidth = 0.75 * width
@@ -56,6 +58,23 @@ class MenuSelection extends React.Component {
         <Text>{ item.name }</Text>
         <Text>{ item.description }</Text>
       </TouchableOpacity>
+      <Button
+        onPress={() => this._addOrder(item) }
+        title="Add to Order"
+        color="#841584"
+        accessibilityLabel="Do your job!"
+      />
+    </View>
+  )
+
+  _renderOrder = ({ item }) => (
+    <View style={styles.card}>
+      <TouchableOpacity onPress={() => alert(item.price)}>
+        <Text>{ item.name }</Text>
+        <Text>{ item.qty }</Text>
+        <Text>{ item.price }</Text>
+        <Text>{ item.key }</Text>
+      </TouchableOpacity>
     </View>
   )
 
@@ -73,6 +92,28 @@ class MenuSelection extends React.Component {
         searchMenu: text
       })
     }
+  }
+
+  _addOrder (menu) {
+    const newOrder = {
+      name: menu.name,
+      price: menu.price,
+      qty: 1
+    }
+    let already = false
+    for (let i = 0; i < this.props.orders.length; i++) {
+      if (this.props.orders[i].name === newOrder.name) {
+        this.props.orders[i].qty += 1
+        alert('Jumlah dipesan: ' + this.props.orders[i].qty)
+        already = true
+      }
+    }
+    if (!already) {
+      this.props.orders.push(newOrder)
+    }
+    // orders = orders.push(newOrder)
+    alert(this.props.orders.length)
+    // this.props.addOrder(this.props.orders)
   }
 
   render () {
@@ -110,12 +151,18 @@ class MenuSelection extends React.Component {
           <View style={styles.listContainer}>
             <Text>Menu yang sudah dipesan</Text>
             <FlatList
-              data={this.state.filtered}
-              renderItem={this._filteredMenu}
+              data={this.props.orders}
+              renderItem={this._renderOrder}
               keyExtractor={(item, index) => item.name}
               style={{marginTop: 30}}
             />
           </View>
+          <Button
+            onPress={() => {} }
+            title="Selesai Memesan"
+            color="#841584"
+            accessibilityLabel="Do your job!"
+          />
         </View>
       )
     }
@@ -124,8 +171,15 @@ class MenuSelection extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    menu: state.menu
+    menu: state.menu,
+    orders: state.order.orders
   }
 }
 
-export default connect(mapStateToProps, null)(MenuSelection)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addOrder: (orders) => dispatch(addOrder(orders))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MenuSelection)
