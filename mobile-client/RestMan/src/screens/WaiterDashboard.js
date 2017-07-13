@@ -7,9 +7,11 @@ import {
   View,
   TouchableHighlight,
   Image,
-  AsyncStorage
+  AsyncStorage,
+  Button
 } from 'react-native'
 import { connect } from 'react-redux'
+import { NavigationActions } from 'react-navigation'
 
 const styles = {
   container: {
@@ -39,7 +41,8 @@ class WaiterDashboard extends React.Component {
   constructor () {
     super ()
     this.state = {
-      token: ''
+      token: '',
+      username: ''
     }
   }
 
@@ -57,13 +60,44 @@ class WaiterDashboard extends React.Component {
       this.setState({
         token: result
       })
+      AsyncStorage.getItem('user', (err, result) => {
+        const user = JSON.parse(result)
+        this.setState({
+          username: user.username
+        })
+      })
     })
+  }
+
+  _doLogout () {
+    AsyncStorage.removeItem('token', (err, result) => {
+      this.setState({
+        token: ''
+      })
+      AsyncStorage.removeItem('user', (err, result) => {
+        this.setState({
+          username: ''
+        })
+        const goLogin = NavigationActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({ routeName: 'Login'})
+          ]
+        })
+        this.props.navigation.dispatch(goLogin)
+      })
+    })
+  }
+
+  _addOrder () {
+    // AXIOS CREATE ORDER
+    this.props.navigation.navigate('MenuSelection')
   }
 
   render () {
     return (
       <View style={styles.container}>
-        <Text>Selamat bekerja, {this.props.user.username}</Text>
+        <Text>Selamat bekerja, {this.state.username}</Text>
         <View style={styles.listContainer}>
           <Text>Order Aktif</Text>
           <FlatList
@@ -74,23 +108,23 @@ class WaiterDashboard extends React.Component {
           <View style={{alignItems: 'flex-start', flexDirection: 'row', justifyContent: 'center'}}>
             <TouchableHighlight
               style={ styles.imageContainer2 }
-              onPress={() => this.props.navigation.navigate('MenuSelection')}>
+              onPress={() => this._addOrder()}>
               <Image style={ styles.image } source={{ uri: 'https://cdn4.iconfinder.com/data/icons/vectory-bonus-3/40/button_add-512.png' }} />
             </TouchableHighlight>
             <Text style={{ fontSize: 30 }}>
               Tambah order
             </Text>
           </View>
+          <Button
+            onPress={() => this._doLogout() }
+            title="Logout"
+            color="#841584"
+            accessibilityLabel="Do your job!"
+          />
         </View>
       </View>
     )
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    user: state.user
-  }
-}
-
-export default connect(mapStateToProps, null)(WaiterDashboard)
+export default WaiterDashboard

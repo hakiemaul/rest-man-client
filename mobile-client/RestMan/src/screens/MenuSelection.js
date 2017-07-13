@@ -9,7 +9,9 @@ import {
   Dimensions,
   TouchableOpacity,
   TouchableHighlight,
-  Modal
+  Modal,
+  Alert,
+  Picker
 } from 'react-native'
 import { connect } from 'react-redux'
 
@@ -48,7 +50,9 @@ class MenuSelection extends React.Component {
     super ()
     this.state = {
       searchMenu: '',
-      filtered: []
+      filtered: [],
+      table: '',
+      language: 'Indonesia'
     }
   }
 
@@ -110,17 +114,26 @@ class MenuSelection extends React.Component {
     }
     if (!already) {
       this.props.orders.push(newOrder)
+      alert('Jumlah dipesan: 1')
     }
-    // orders = orders.push(newOrder)
-    alert(this.props.orders.length)
-    // this.props.addOrder(this.props.orders)
+  }
+
+  _doneOrdering () {
+    // AXIOS ACTION CREATE MENU-ORDER
+    Alert.alert( 'Konfirmasi Pesanan', 'Apakah pelanggan sudah selesai memesan?', [  {text: 'Cancel', onPress: () => {}, style: 'cancel'}, {text: 'OK', onPress: () => {}}, ], { cancelable: false } )
   }
 
   render () {
-    if (this.state.filtered.length > 0) {
+    if (this.state.searchMenu.length > 0) {
       return (
         <View style={styles.container}>
           <Text>Yeay masuk</Text>
+          <Picker
+            selectedValue='njksandjknaskj'
+            onValueChange={(itemValue, itemIndex) => this.setState({language: itemValue})}>
+            <Picker.Item label="Java" value="java" />
+            <Picker.Item label="JavaScript" value="js" />
+          </Picker>
           <TextInput
             onChangeText={(text) => this._searchReal(text)}
             value={ this.state.searchMenu }
@@ -142,6 +155,12 @@ class MenuSelection extends React.Component {
       return (
         <View style={styles.container}>
           <Text>Yeay masuk</Text>
+          <Picker
+            selectedValue={this.state.language}
+            onValueChange={(itemValue, itemIndex) => this.setState({language: itemValue})}>
+            <Picker.Item label="Java" value="java" />
+            <Picker.Item label="JavaScript" value="js" />
+          </Picker>
           <TextInput
             onChangeText={(text) => this._searchReal(text)}
             value={ this.state.searchMenu }
@@ -158,7 +177,7 @@ class MenuSelection extends React.Component {
             />
           </View>
           <Button
-            onPress={() => {} }
+            onPress={() => this._doneOrdering() }
             title="Selesai Memesan"
             color="#841584"
             accessibilityLabel="Do your job!"

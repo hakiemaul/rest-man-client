@@ -1,5 +1,5 @@
 const initialState = {
-  meja: [{
+  tables: [{
     name: 'Meja 1',
     statusOrder: false
   },{

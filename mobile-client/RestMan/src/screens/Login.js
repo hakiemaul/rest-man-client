@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import axios from 'axios'
+import { NavigationActions } from 'react-navigation'
 
 import { hasLoggedIn } from '../actions'
 
@@ -65,8 +66,15 @@ class Login extends React.Component {
         role: 'waiter'
       }
       AsyncStorage.setItem('token', token, () => {
-        self.props.hasLoggedIn(user)
-        self.props.navigation.navigate('WaiterDashboard')
+        AsyncStorage.setItem('user', JSON.stringify(user), () => {
+          const goWaiter = NavigationActions.reset({
+            index: 0,
+            actions: [
+              NavigationActions.navigate({ routeName: 'WaiterDashboard'})
+            ]
+          })
+          this.props.navigation.dispatch(goWaiter)
+        })
       })
     }
   }

@@ -11,17 +11,10 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import { NavigationActions } from 'react-navigation'
 
-const resetAction = NavigationActions.reset({
-  index: 0,
-  actions: [
-    NavigationActions.navigate({ routeName: 'Profile'})
-  ]
-})
-
 class Loading extends React.Component {
   componentDidMount () {
     AsyncStorage.getItem('token', (err, result) => {
-      if (result.length === 0) {
+      if (result === null) {
         const goLogin = NavigationActions.reset({
           index: 0,
           actions: [
