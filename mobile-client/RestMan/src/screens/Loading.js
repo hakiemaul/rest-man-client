@@ -23,13 +23,26 @@ class Loading extends React.Component {
         })
         this.props.navigation.dispatch(goLogin)
       } else {
-        const goWaiter = NavigationActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({ routeName: 'WaiterDashboard'})
-          ]
+        AsyncStorage.getItem('user', (err, result) => {
+          let user = JSON.parse(result)
+          if (user.role === 'waiter') {
+            const goWaiter = NavigationActions.reset({
+              index: 0,
+              actions: [
+                NavigationActions.navigate({ routeName: 'WaiterDashboard'})
+              ]
+            })
+            this.props.navigation.dispatch(goWaiter)
+          } else if (user.role === 'cashier') {
+            const goCashier = NavigationActions.reset({
+              index: 0,
+              actions: [
+                NavigationActions.navigate({ routeName: 'CashierDashboard'})
+              ]
+            })
+            this.props.navigation.dispatch(goCashier)
+          }
         })
-        this.props.navigation.dispatch(goWaiter)
       }
     })
   }
