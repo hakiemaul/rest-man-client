@@ -62,7 +62,8 @@ class Login extends React.Component {
         username: self.state.username,
         role: 'waiter'
       }
-      alert(JSON.stringify(user))
+      self.props.hasLoggedIn(user)
+      self.props.navigation.navigate('WaiterDashboard')
     }
   }
 
