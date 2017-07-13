@@ -4,7 +4,8 @@ import {
   View,
   Text,
   TextInput,
-  Button
+  Button,
+  AsyncStorage
 } from 'react-native'
 import { connect } from 'react-redux'
 import axios from 'axios'
@@ -58,12 +59,15 @@ class Login extends React.Component {
       // .catch(err => console.log(err))
 
       // mockup data
+      let token = '12i9301j239j2109i390'
       let user = {
         username: self.state.username,
         role: 'waiter'
       }
-      self.props.hasLoggedIn(user)
-      self.props.navigation.navigate('WaiterDashboard')
+      AsyncStorage.setItem('token', token, () => {
+        self.props.hasLoggedIn(user)
+        self.props.navigation.navigate('WaiterDashboard')
+      })
     }
   }
 

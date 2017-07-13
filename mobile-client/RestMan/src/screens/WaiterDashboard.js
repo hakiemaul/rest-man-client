@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   View,
   TouchableHighlight,
-  Image
+  Image,
+  AsyncStorage
 } from 'react-native'
 import { connect } from 'react-redux'
 
@@ -35,6 +36,13 @@ const styles = {
 }
 
 class WaiterDashboard extends React.Component {
+  constructor () {
+    super ()
+    this.state = {
+      token: ''
+    }
+  }
+
   _renderItem = ({ item }) => (
     <TouchableOpacity
       style={{ width: 300 }}
@@ -43,6 +51,15 @@ class WaiterDashboard extends React.Component {
       <Text style={{ fontSize: 10 }}>Klik untuk lihat detail</Text>
     </TouchableOpacity>
   )
+
+  componentDidMount () {
+    AsyncStorage.getItem('token', (err, result) => {
+      this.setState({
+        token: result
+      })
+    })
+  }
+
   render () {
     return (
       <View style={styles.container}>
@@ -54,8 +71,10 @@ class WaiterDashboard extends React.Component {
             renderItem={this._renderItem}
             style={{marginBottom: 30, marginTop: 30}}
           />
-          <View style={{alignItems: 'flex-start', flexDirection: 'row'}}>
-            <TouchableHighlight style={ styles.imageContainer2 }>
+          <View style={{alignItems: 'flex-start', flexDirection: 'row', justifyContent: 'center'}}>
+            <TouchableHighlight
+              style={ styles.imageContainer2 }
+              onPress={() => this.props.navigation.navigate('MenuSelection')}>
               <Image style={ styles.image } source={{ uri: 'https://cdn4.iconfinder.com/data/icons/vectory-bonus-3/40/button_add-512.png' }} />
             </TouchableHighlight>
             <Text style={{ fontSize: 10 }}>
