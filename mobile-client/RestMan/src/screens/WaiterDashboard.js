@@ -77,7 +77,7 @@ class WaiterDashboard extends React.Component {
               onPress={() => this.props.navigation.navigate('MenuSelection')}>
               <Image style={ styles.image } source={{ uri: 'https://cdn4.iconfinder.com/data/icons/vectory-bonus-3/40/button_add-512.png' }} />
             </TouchableHighlight>
-            <Text style={{ fontSize: 10 }}>
+            <Text style={{ fontSize: 30 }}>
               Tambah order
             </Text>
           </View>

@@ -71,14 +71,6 @@ class Login extends React.Component {
     }
   }
 
-  componentWillMount () {
-    AsyncStorage.getItem('token', (err, result) => {
-      if (result.length > 0) {
-        this.props.navigation.navigate('WaiterDashboard')
-      }
-    })
-  }
-
   render () {
     return (
       <View style={styles.container}>
