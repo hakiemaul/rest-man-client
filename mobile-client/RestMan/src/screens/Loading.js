@@ -11,8 +11,11 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import { NavigationActions } from 'react-navigation'
 
+import { getTables } from '../actions'
+
 class Loading extends React.Component {
   componentDidMount () {
+    this.props.getTables()
     AsyncStorage.getItem('token', (err, result) => {
       if (result === null) {
         const goLogin = NavigationActions.reset({
@@ -56,4 +59,10 @@ class Loading extends React.Component {
   }
 }
 
-export default Loading
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getTables: () => dispatch(getTables())
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Loading)

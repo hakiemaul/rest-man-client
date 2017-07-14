@@ -42,7 +42,8 @@ class WaiterDashboard extends React.Component {
     super ()
     this.state = {
       token: '',
-      username: ''
+      username: '',
+      occupied: []
     }
   }
 
@@ -50,7 +51,7 @@ class WaiterDashboard extends React.Component {
     <TouchableOpacity
       style={{ width: 300 }}
       onPress={() => alert(item.key)}>
-      <Text style={{ fontSize: 20 }}>Order Meja {item.key}</Text>
+      <Text style={{ fontSize: 20 }}>Order {item.name}</Text>
       <Text style={{ fontSize: 10 }}>Klik untuk lihat detail</Text>
     </TouchableOpacity>
   )
@@ -66,6 +67,17 @@ class WaiterDashboard extends React.Component {
           username: user.username
         })
       })
+    })
+  }
+
+  componentWillReceiveProps () {
+    var occupied = Object.keys(this.props.table.tables)
+    // var occupied = this.props.table.tables.keys.filter( (obj) => {obj} )
+    // for (let key in this.props.table.tables) {
+    //   this.props.table.tables[key].status === true ? occupied.push(this.props.table.tables[key]) : occupied
+    // }
+    this.setState({
+      occupied: occupied
     })
   }
 
@@ -101,8 +113,9 @@ class WaiterDashboard extends React.Component {
         <View style={styles.listContainer}>
           <Text>Order Aktif</Text>
           <FlatList
-            data={[{key: 'a'}, {key: 'b'}, {key: 'c'}, {key: 'd'}, {key: 'e'}, {key: 'f'}, {key: 'g'}, {key: 'h'}, {key: 'i'}, {key: 'j'}, {key: 'k'}, {key: 'l'}]}
+            data={this.state.occupied}
             renderItem={this._renderItem}
+            keyExtractor={(item, index) => item.name}
             style={{marginBottom: 30, marginTop: 30}}
           />
           <View style={{alignItems: 'flex-start', flexDirection: 'row', justifyContent: 'center'}}>
@@ -127,4 +140,16 @@ class WaiterDashboard extends React.Component {
   }
 }
 
-export default WaiterDashboard
+const mapStateToProps = (state) => {
+  return {
+    table: state.table
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getTables: () => dispatch(getTables())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(WaiterDashboard)

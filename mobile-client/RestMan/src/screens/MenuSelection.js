@@ -15,7 +15,7 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 
-import { addOrder } from '../actions'
+import { addOrder, isOrdering, tableIsOrdering } from '../actions'
 
 const { height, width } = Dimensions.get('window')
 const cardHeight = 0.1 * height
@@ -120,7 +120,9 @@ class MenuSelection extends React.Component {
 
   _doneOrdering () {
     // AXIOS ACTION CREATE MENU-ORDER
-    Alert.alert( 'Konfirmasi Pesanan', 'Apakah pelanggan sudah selesai memesan?', [  {text: 'Cancel', onPress: () => {}, style: 'cancel'}, {text: 'OK', onPress: () => {}}, ], { cancelable: false } )
+    Alert.alert( 'Konfirmasi Pesanan', 'Apakah pelanggan sudah selesai memesan?', [  {text: 'Cancel', onPress: () => {}, style: 'cancel'}, {text: 'OK', onPress: () => {
+      this.props.tableIsOrdering('Meja 2')
+    }}, ], { cancelable: false } )
   }
 
   render () {
@@ -197,7 +199,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addOrder: (orders) => dispatch(addOrder(orders))
+    addOrder: (orders) => dispatch(addOrder(orders)),
+    isOrdering: (table) => dispatch(isOrdering(table)),
+    tableIsOrdering: (table) => dispatch(tableIsOrdering(table))
   }
 }
 
