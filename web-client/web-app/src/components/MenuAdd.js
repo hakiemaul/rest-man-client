@@ -1,7 +1,11 @@
 import React from 'react'
 import { Button, Form } from 'semantic-ui-react'
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 
-class MenuAdd extends React.component {
+import { addAction } from '../actions/addAction'
+
+class MenuAdd extends React.Component {
 
   constructor(){
     super()
@@ -10,26 +14,48 @@ class MenuAdd extends React.component {
 
   handleSubmit(e){
     e.preventDefault()
-    console.log(e);
+    var add_to = 'menu'
+    this.props.addMenu(this.state,add_to)
+    this.props.history.push('/menu');
   }
 
-  handleChange(){
+  handleChange(e,type){
+    if(type==='name'){
 
+      this.setState({name:e.target.value})
+    }else if(type==='category'){
+
+      this.setState({category:e.target.value})
+    }else {
+      console.log('error');
+    }
   }
 
   render(){
     return (
-      <Form onSubmit={(e)=>this.addData(e)}>
+
+      <Form onSubmit={(e)=>this.handleSubmit(e)}>
         <Form.Field >
           <label>Name</label>
-          <input onChange={(e) => { this.handleChange(e,'name') }} placeholder='Name' />
+          <input onChange={(e) => { this.handleChange(e,'name') }} value={this.state.name} placeholder='Name' />
         </Form.Field>
         <Form.Field>
           <label>category</label>
-          <input placeholder='category' />
+          <input onChange={(e) => { this.handleChange(e,'category') }} value = { this.state.category } placeholder='category' />
         </Form.Field>
-        <Button type='submit'>Submit</Button>
+            <Button type='submit'>Submit</Button>
       </Form>
+
     )
   }
 }
+
+
+const mapDispatchToProps = (dispatch) => {
+  return{
+    addMenu: (data,add_to) => dispatch(addAction(data,add_to))
+  }
+}
+
+
+export default connect (null,mapDispatchToProps)(MenuAdd)

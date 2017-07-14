@@ -12,16 +12,11 @@ class SidebarLeftPush extends Component {
     this.state = { tes:false }
   }
 
-  test(){
-    setTimeout(()=>{this.setState({tes:true})},1000)
-  }
-
   render() {
-    this.test()
     return (
       <div >
         <Sidebar.Pushable as={Segment}>
-          <Sidebar as={Menu} animation='push' width='thin' visible={this.state.tes} icon='labeled' vertical inverted>
+          <Sidebar as={Menu} animation='push' width='thin' visible={true} icon='labeled' vertical inverted>
             <Link to={{pathname:'/'}}>
               <Menu.Item name='Dasboard'>
                 <Icon name='home' />
@@ -29,7 +24,7 @@ class SidebarLeftPush extends Component {
               </Menu.Item>
             </Link>
 
-            <Link to={{pathname:'/menu'}}>
+            <Link to={{pathname:'/users'}}>
               <Menu.Item name='User'>
                 <Icon name='users' />
                 Employees
@@ -43,7 +38,7 @@ class SidebarLeftPush extends Component {
               </Menu.Item>
             </Link>
 
-            <Link to={{pathname:'/menu'}}>
+            <Link to={{pathname:'/settings'}}>
               <Menu.Item name='Settings'>
                 <Icon name='settings' />
                 Settings
@@ -53,7 +48,7 @@ class SidebarLeftPush extends Component {
           </Sidebar>
 
           <Sidebar.Pusher>
-            <Segment basic style={{display:'flex',width:'89%',height:500}}>
+            <Segment basic style={{display:'flex',width:'89%',height:800}}>
                 <ContentBody />
             </Segment>
           </Sidebar.Pusher>

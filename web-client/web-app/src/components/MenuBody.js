@@ -13,6 +13,7 @@ class MenuBody extends React.Component {
 
 
   render(){
+    console.log(this.props.menu);
     const { menu } = this.props
     var headers = Object.keys(menu[0])
     headers.unshift('no')
