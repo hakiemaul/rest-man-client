@@ -40,6 +40,31 @@ class CashierDashboard extends React.Component {
     return (
       <View style={styles.container}>
         <Text>Selamat bekerja, {this.state.username}</Text>
+        <View style={styles.listContainer}>
+          <Text>Order Aktif</Text>
+          <FlatList
+            data={this.state.occupied}
+            renderItem={this._renderItem}
+            keyExtractor={(item, index) => item.name}
+            style={{marginBottom: 30, marginTop: 30}}
+          />
+          <View style={{alignItems: 'flex-start', flexDirection: 'row', justifyContent: 'center'}}>
+            <TouchableHighlight
+              style={ styles.imageContainer2 }
+              onPress={() => this._addOrder()}>
+              <Image style={ styles.image } source={{ uri: 'https://cdn4.iconfinder.com/data/icons/vectory-bonus-3/40/button_add-512.png' }} />
+            </TouchableHighlight>
+            <Text style={{ fontSize: 30 }}>
+              Tambah order
+            </Text>
+          </View>
+          <Button
+            onPress={() => this._doLogout() }
+            title="Logout"
+            color="#841584"
+            accessibilityLabel="Do your job!"
+          />
+        </View>
       </View>
     )
   }
