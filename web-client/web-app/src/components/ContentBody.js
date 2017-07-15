@@ -8,6 +8,8 @@ import MenuAdd from './MenuAdd'
 import UserBody from './UserBody'
 import UserAdd from './UserAdd'
 
+import ReportBody from './ReportBody'
+
 import SettingBody from './SettingBody'
 
 import Page404 from './Page404'
@@ -23,6 +25,7 @@ export default () => {
           <Route path='/menu/add/' component ={ MenuAdd }/>
           <Route exact path='/users' component ={ UserBody }/>
           <Route path='/users/add' component ={ UserAdd }/>
+          <Route exact path='/report' component ={ ReportBody }/>
           <Route path='/settings' component ={ SettingBody }/>
           <Route component={Page404}/>
         </Switch>

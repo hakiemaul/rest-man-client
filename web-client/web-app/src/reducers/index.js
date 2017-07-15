@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 
 import menuReducer from './menuReducer';
 import userReducer from './userReducer';
+import reportReducer from './reportReducer';
 
-console.log('re-----------',menuReducer);
-export default combineReducers({ menuReducer,userReducer });
+
+export default combineReducers({ menuReducer,userReducer,reportReducer });

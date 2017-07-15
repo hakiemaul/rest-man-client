@@ -14,7 +14,7 @@ class SidebarLeftPush extends Component {
 
   render() {
     return (
-      <div >
+      <div>
         <Sidebar.Pushable as={Segment}>
           <Sidebar as={Menu} animation='push' width='thin' visible={true} icon='labeled' vertical inverted>
             <Link to={{pathname:'/'}}>
@@ -27,7 +27,7 @@ class SidebarLeftPush extends Component {
             <Link to={{pathname:'/users'}}>
               <Menu.Item name='User'>
                 <Icon name='users' />
-                Employees
+                Users
               </Menu.Item>
             </Link>
 
@@ -35,6 +35,13 @@ class SidebarLeftPush extends Component {
               <Menu.Item name='Food'>
                 <Icon name='food' />
                 Menu
+              </Menu.Item>
+            </Link>
+
+            <Link to={{pathname:'/report'}}>
+              <Menu.Item name='report'>
+                <Icon name='bar chart' />
+                Report
               </Menu.Item>
             </Link>
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Segment,List,Image,Grid,Header } from 'semantic-ui-react'
-import { scaleLinear, scaleBand } from 'd3-scale'
-import { min, max } from 'd3-array'
+import { scaleLinear } from 'd3-scale'
+import { max } from 'd3-array'
 import { select } from 'd3-selection'
 import { axisLeft, axisBottom } from 'd3-axis'
 
@@ -14,14 +14,19 @@ class BarChart extends Component {
    componentDidMount() {
       this.createBarChart()
    }
-   componentDidUpdate() {
-      this.createBarChart()
+   componentDidUpdate(prevProps,prevState) {
+     if (prevProps.data === this.props.data) {
+       this.setState({
+         data: this.props.data
+       });
+     }
+    this.createBarChart()
    }
    createBarChart() {
      const data = this.props.data.map(d => d.jumlah)
-     const nama = this.props.data.map(d => d.nama)
+    //  const nama = this.props.data.map(d => d.nama)
      const svg = select(this.svg)
-     const width = 700, height = 300, margin = 20, marginLeft = 40
+     const width = 700, height = 300, marginLeft = 40
      const yscale = scaleLinear().domain([0,max(data)]).range([0,height-2*marginLeft])
      const xscale = scaleLinear().domain([0,data.length]).range([0,width-marginLeft])
      const x = scaleLinear().domain([0,data.length]).range([0,width-marginLeft])
@@ -54,7 +59,7 @@ class BarChart extends Component {
 
   render() {
         return(
-        <Segment padded='very' style={{marginBottom:20,marginTop:20,marginLeft:50,marginRight:20}}>
+        <Segment padded='very' style={{marginBottom:20,marginTop:20,marginLeft:20,marginRight:20}}>
           <Grid>
             <Grid.Column floated='left' width={5}>
               <svg ref={svg => this.svg = svg}

@@ -46,7 +46,7 @@ class UserBody extends React.Component {
             </Table.Body>
           </Table>
         </div>
-        <div>
+        <div style={{marginTop:20}}>
           <Link to={{pathname:'/users/add'}}>
             <Button animated='vertical' on>
                <Button.Content visible>Add</Button.Content>
