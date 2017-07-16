@@ -67,7 +67,7 @@ class Login extends React.Component {
       let token = '12i9301j239j2109i390'
       let user = {
         username: self.state.username,
-        role: 'cashier'
+        role: 'waiter'
       }
       AsyncStorage.setItem('token', token, () => {
         AsyncStorage.setItem('user', JSON.stringify(user), () => {
