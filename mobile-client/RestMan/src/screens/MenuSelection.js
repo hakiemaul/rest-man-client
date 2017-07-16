@@ -23,10 +23,10 @@ const cardWidth = 0.75 * width
 const styles = {
   container: {
     flex: 1,
-    justifyContent: 'center',
     flexDirection: 'column',
-    alignItems: 'flex-start',
-    backgroundColor: '#4EA384',
+    backgroundColor: '#FC7100',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start'
   },
   listContainer: {
     flex: 1,
@@ -35,13 +35,18 @@ const styles = {
     alignItems: 'flex-start',
   },
   card: {
-    height: 100,
+    height: 130,
     width: cardWidth,
-    backgroundColor: '#fff',
+    backgroundColor: '#443C35',
     borderWidth: 0.5,
     borderRadius: 6,
-    padding: 20,
-    marginBottom: 30
+    padding: 15,
+    marginBottom: 30,
+    justifyContent: 'space-between'
+  },
+  text: {
+    color: '#FFF',
+    fontSize: 20
   }
 }
 
@@ -52,15 +57,16 @@ class MenuSelection extends React.Component {
       searchMenu: '',
       filtered: [],
       table: '',
-      location: 'Indonesia'
+      free: [],
+      subtotal: 0
     }
   }
 
   _filteredMenu = ({ item }) => (
     <View style={styles.card}>
       <TouchableOpacity onPress={() => alert(item.price)}>
-        <Text>{ item.name }</Text>
-        <Text>{ item.description }</Text>
+        <Text style={{...styles.text, fontWeight: 'bold', fontSize: 15}}>{ item.name }</Text>
+        <Text style={{...styles.text, fontStyle: 'italic', fontSize: 12}}>{ item.description }</Text>
       </TouchableOpacity>
       <Button
         onPress={() => this._addOrder(item) }
@@ -74,10 +80,9 @@ class MenuSelection extends React.Component {
   _renderOrder = ({ item }) => (
     <View style={styles.card}>
       <TouchableOpacity onPress={() => alert(item.price)}>
-        <Text>{ item.name }</Text>
-        <Text>{ item.qty }</Text>
-        <Text>{ item.price }</Text>
-        <Text>{ item.key }</Text>
+        <Text style={{...styles.text, fontWeight: 'bold', fontSize: 15}}>{ item.name }</Text>
+        <Text style={{...styles.text, fontSize: 12}}>Qty: { item.qty }</Text>
+        <Text style={{...styles.text, fontSize: 12}}>Harga satuan: { item.price }</Text>
       </TouchableOpacity>
     </View>
   )
@@ -108,11 +113,13 @@ class MenuSelection extends React.Component {
     for (let i = 0; i < this.props.orders.length; i++) {
       if (this.props.orders[i].name === newOrder.name) {
         this.props.orders[i].qty += 1
+        this.state.subtotal += this.props.orders[i].price
         alert('Jumlah dipesan: ' + this.props.orders[i].qty)
         already = true
       }
     }
     if (!already) {
+      this.state.subtotal += newOrder.price
       this.props.orders.push(newOrder)
       alert('Jumlah dipesan: 1')
     }
@@ -125,33 +132,46 @@ class MenuSelection extends React.Component {
     }}, ], { cancelable: false } )
   }
 
+  componentDidMount () {
+    var free = []
+    for (let key in this.props.table.tables) {
+      this.props.table.tables[key].status === false ? free.push(this.props.table.tables[key]) : free
+    }
+    this.setState({
+      free: free
+    })
+  }
+
   render () {
     if (this.state.searchMenu.length > 0) {
       return (
         <View style={styles.container}>
-          <Text>Halaman pemesanan</Text>
-          <Picker
-              style={{width: 100}}
-              selectedValue={this.state.location}
-              onValueChange={(loc) => this.setState({location: loc})}
-              mode='dropdown'>
-            <Picker.Item label="Location 1" value="1" />
-            <Picker.Item label="Location 2" value="2" />
-            <Picker.Item label="Location 3" value="3" />
-          </Picker>
+          <Text style={{...styles.text, marginTop: 20, marginBottom: 20, marginLeft: 20}}>Halaman pemesanan</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={{...styles.text, fontSize: 15, marginLeft: 20, marginTop: 14, marginRight: 10}}>Nomor Meja</Text>
+            <Picker
+                style={{width: 100}}
+                selectedValue={this.state.table}
+                onValueChange={(tab) => this.setState({table: tab})}
+                mode='dropdown'>
+              {this.state.free.map(table => (
+                <Picker.Item label={table.name} value={table.name} key={table.name} />
+              ))}
+            </Picker>
+          </View>
           <TextInput
             onChangeText={(text) => this._searchReal(text)}
             value={ this.state.searchMenu }
-            style={{ width: 300 }}
+            style={{ width: 300, marginLeft: 20 }}
             placeholder='Nama menu'
           />
           <View style={styles.listContainer}>
-            <Text>Hasil pencarian menu</Text>
+            <Text style={{...styles.text, marginLeft: 20, fontSize: 15}}>Hasil pencarian menu</Text>
             <FlatList
               data={this.state.filtered}
               renderItem={this._filteredMenu}
               keyExtractor={(item, index) => item.name}
-              style={{marginTop: 30}}
+              style={{marginTop: 30, marginLeft: 44}}
             />
           </View>
         </View>
@@ -159,28 +179,35 @@ class MenuSelection extends React.Component {
     } else {
       return (
         <View style={styles.container}>
-          <Text>Yeay masuk</Text>
-          <Picker
-            selectedValue={this.state.language}
-            onValueChange={(itemValue, itemIndex) => this.setState({language: itemValue})}>
-            <Picker.Item label="Java" value="java" />
-            <Picker.Item label="JavaScript" value="js" />
-          </Picker>
+          <Text style={{...styles.text, marginTop: 20, marginBottom: 20, marginLeft: 20}}>Halaman pemesanan</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={{...styles.text, fontSize: 15, marginLeft: 20, marginTop: 14, marginRight: 10}}>Nomor Meja</Text>
+            <Picker
+                style={{width: 100}}
+                selectedValue={this.state.table}
+                onValueChange={(tab) => this.setState({table: tab})}
+                mode='dropdown'>
+              {this.state.free.map(table => (
+                <Picker.Item label={table.name} value={table.name} key={table.name} />
+              ))}
+            </Picker>
+          </View>
           <TextInput
             onChangeText={(text) => this._searchReal(text)}
             value={ this.state.searchMenu }
-            style={{ width: 300 }}
+            style={{ width: 300, marginLeft: 20 }}
             placeholder='Nama menu'
           />
           <View style={styles.listContainer}>
-            <Text>Menu yang sudah dipesan</Text>
+            <Text style={{...styles.text, marginLeft: 20, fontSize: 15}}>Menu yang sudah dipesan</Text>
             <FlatList
               data={this.props.orders}
               renderItem={this._renderOrder}
               keyExtractor={(item, index) => item.name}
-              style={{marginTop: 30}}
+              style={{marginTop: 30, marginLeft: 44}}
             />
           </View>
+          <Text style={{...styles.text, margin: 20}}>Subtotal: {this.state.subtotal}</Text>
           <Button
             onPress={() => this._doneOrdering() }
             title="Selesai Memesan"
@@ -196,7 +223,8 @@ class MenuSelection extends React.Component {
 const mapStateToProps = (state) => {
   return {
     menu: state.menu,
-    orders: state.order.orders
+    orders: state.order.orders,
+    table: state.table
   }
 }
 
