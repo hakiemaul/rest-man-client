@@ -7,7 +7,9 @@ import {
   Button,
   AsyncStorage,
   FlatList,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView,
+  RefreshControl
 } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
@@ -15,24 +17,31 @@ import { NavigationActions } from 'react-navigation'
 const styles = {
   container: {
     flex: 1,
-    justifyContent: 'space-around',
     flexDirection: 'column',
-    alignItems: 'center',
-    backgroundColor: '#4EA384',
+    backgroundColor: '#FC7100',
   },
   listContainer: {
     flex: 1,
     justifyContent: 'space-between',
     flexDirection: 'column',
     alignItems: 'flex-start',
+  },
+  text: {
+    color: '#FFF',
+    fontSize: 20
   }
 }
 
 class CashierDashboard extends React.Component {
+  static navigationOptions = {
+    title: 'Halaman Kasir'
+  }
+
   constructor () {
     super ()
     this.state = {
-      username: ''
+      username: '',
+      refreshing: false,
     }
   }
 
@@ -56,15 +65,17 @@ class CashierDashboard extends React.Component {
   }
 
   componentWillReceiveProps () {
-    var occupied = []
-    // var occupied = Object.keys(this.props.table.tables)
-    // var occupied = this.props.table.tables.keys.filter( (obj) => {obj} )
-    for (let key in this.props.table.tables) {
-      this.props.table.tables[key].status === true ? occupied.push(this.props.table.tables[key]) : occupied
-    }
-    this.setState({
-      occupied: occupied
-    })
+    setTimeout(() => {
+      var occupied = []
+      // var occupied = Object.keys(this.props.table.tables)
+      // var occupied = this.props.table.tables.keys.filter( (obj) => {obj} )
+      for (let key in this.props.table.tables) {
+        this.props.table.tables[key].status === true ? occupied.push(this.props.table.tables[key]) : occupied
+      }
+      this.setState({
+        occupied: occupied
+      })
+    }, 3000)
   }
 
   _doLogout () {
@@ -89,33 +100,33 @@ class CashierDashboard extends React.Component {
 
   _renderItem = ({ item }) => (
     <TouchableOpacity
-      style={{ width: 300 }}
-      onPress={() => alert(item.key)}>
-      <Text style={{ fontSize: 20 }}>Order {item.name}</Text>
-      <Text style={{ fontSize: 10 }}>Klik untuk pembayaran</Text>
+      style={{ width: 300, borderWidth: 1, borderRadius: 10, padding: 20, marginBottom: 10, backgroundColor: '#443C35' }}
+      onPress={() => alert(item.name)}>
+      <Text style={styles.text}>Order {item.name}</Text>
+      <Text style={{...styles.text, fontSize: 10 }}>Klik untuk menuju pembayaran</Text>
     </TouchableOpacity>
   )
 
   render () {
     return (
-      <View style={styles.container}>
-        <Text>Selamat bekerja, {this.state.username}</Text>
+      <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'space-around', alignItems: 'center'}}>
+        <Text style={{...styles.text, marginTop: 20, marginBottom: 20}}>Selamat bekerja, {this.state.username}</Text>
         <View style={styles.listContainer}>
-          <Text>Order Aktif</Text>
+          <Text style={styles.text}>Order Aktif</Text>
           <FlatList
             data={this.state.occupied}
             renderItem={this._renderItem}
             keyExtractor={(item, index) => item.name}
-            style={{ marginTop: 30}}
+            style={{ marginTop: 30, width: 300 }}
           />
         </View>
         <Button
           onPress={() => this._doLogout() }
           title="Logout"
-          color="#841584"
+          color="#443C35"
           accessibilityLabel="Do your job!"
         />
-      </View>
+      </ScrollView>
     )
   }
 }
