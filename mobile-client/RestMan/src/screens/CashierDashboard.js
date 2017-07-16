@@ -3,13 +3,11 @@ import {
   StyleSheet,
   View,
   Text,
-  TextInput,
   Button,
   AsyncStorage,
   FlatList,
   TouchableOpacity,
-  ScrollView,
-  RefreshControl
+  ScrollView
 } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
@@ -45,21 +43,18 @@ class CashierDashboard extends React.Component {
     }
   }
 
-  componentWillMount () {
-    var occupied = []
-    for (let key in this.props.table.tables) {
-      this.props.table.tables[key].status === true ? occupied.push(this.props.table.tables[key]) : occupied
-    }
-    this.setState({
-      occupied: occupied
-    })
-  }
-
   componentDidMount () {
     AsyncStorage.getItem('user', (err, result) => {
       const user = JSON.parse(result)
       this.setState({
         username: user.username
+      })
+      var occupied = []
+      for (let key in this.props.table.tables) {
+        this.props.table.tables[key].status === true ? occupied.push(this.props.table.tables[key]) : occupied
+      }
+      this.setState({
+        occupied: occupied
       })
     })
   }
@@ -67,8 +62,6 @@ class CashierDashboard extends React.Component {
   componentWillReceiveProps () {
     setTimeout(() => {
       var occupied = []
-      // var occupied = Object.keys(this.props.table.tables)
-      // var occupied = this.props.table.tables.keys.filter( (obj) => {obj} )
       for (let key in this.props.table.tables) {
         this.props.table.tables[key].status === true ? occupied.push(this.props.table.tables[key]) : occupied
       }
