@@ -44,7 +44,7 @@ class Loading extends React.Component {
         })
         setTimeout( () => {
           this.props.navigation.dispatch(goLogin)
-        },4000)
+        },1000)
       } else {
         AsyncStorage.getItem('user', (err, result) => {
           let user = JSON.parse(result)

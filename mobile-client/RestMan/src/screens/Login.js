@@ -19,7 +19,7 @@ const styles = {
     justifyContent: 'space-between',
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: '#4EA384',
+    backgroundColor: '#FC7100',
   },
   welcome: {
     fontSize: 30,
@@ -32,6 +32,10 @@ const styles = {
 }
 
 class Login extends React.Component {
+  static navigationOptions = {
+    title: 'Login Page'
+  }
+
   constructor () {
     super ()
     this.state = {
@@ -88,6 +92,7 @@ class Login extends React.Component {
             onChangeText={(text) => this.setState({ username: text })}
             value={ this.state.username }
             style={{ width: 300 }}
+            placeholderTextColor='white'
             placeholder='Employee username'
           />
           <TextInput
@@ -95,6 +100,7 @@ class Login extends React.Component {
             value={ this.state.password }
             style={{ width: 300 }}
             secureTextEntry={true}
+            placeholderTextColor='white'
             placeholder='Password'
           />
         </View>
@@ -102,8 +108,9 @@ class Login extends React.Component {
           <Button
             onPress={() => this._doLogin() }
             title="Login"
-            color="#841584"
+            color="#443C35"
             accessibilityLabel="Do your job!"
+            style={{width: 200}}
           />
         </View>
       </View>
