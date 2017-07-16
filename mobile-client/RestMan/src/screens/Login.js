@@ -67,13 +67,13 @@ class Login extends React.Component {
       }
       AsyncStorage.setItem('token', token, () => {
         AsyncStorage.setItem('user', JSON.stringify(user), () => {
-          const goWaiter = NavigationActions.reset({
+          const goLoad = NavigationActions.reset({
             index: 0,
             actions: [
-              NavigationActions.navigate({ routeName: 'CashierDashboard'})
+              NavigationActions.navigate({ routeName: 'Loading'})
             ]
           })
-          this.props.navigation.dispatch(goWaiter)
+          this.props.navigation.dispatch(goLoad)
         })
       })
     }
