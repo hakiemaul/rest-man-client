@@ -25,7 +25,7 @@ const styles = {
     flex: 1,
     justifyContent: 'center',
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     backgroundColor: '#4EA384',
   },
   listContainer: {
@@ -52,7 +52,7 @@ class MenuSelection extends React.Component {
       searchMenu: '',
       filtered: [],
       table: '',
-      language: 'Indonesia'
+      location: 'Indonesia'
     }
   }
 
@@ -129,12 +129,15 @@ class MenuSelection extends React.Component {
     if (this.state.searchMenu.length > 0) {
       return (
         <View style={styles.container}>
-          <Text>Yeay masuk</Text>
+          <Text>Halaman pemesanan</Text>
           <Picker
-            selectedValue='njksandjknaskj'
-            onValueChange={(itemValue, itemIndex) => this.setState({language: itemValue})}>
-            <Picker.Item label="Java" value="java" />
-            <Picker.Item label="JavaScript" value="js" />
+              style={{width: 100}}
+              selectedValue={this.state.location}
+              onValueChange={(loc) => this.setState({location: loc})}
+              mode='dropdown'>
+            <Picker.Item label="Location 1" value="1" />
+            <Picker.Item label="Location 2" value="2" />
+            <Picker.Item label="Location 3" value="3" />
           </Picker>
           <TextInput
             onChangeText={(text) => this._searchReal(text)}

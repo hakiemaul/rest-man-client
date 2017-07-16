@@ -66,16 +66,24 @@ class WaiterDashboard extends React.Component {
         this.setState({
           username: user.username
         })
+        var occupied = []
+        for (let key in this.props.table.tables) {
+          this.props.table.tables[key].status === true ? occupied.push(this.props.table.tables[key]) : occupied
+        }
+        this.setState({
+          occupied: occupied
+        })
       })
     })
   }
 
   componentWillReceiveProps () {
-    var occupied = Object.keys(this.props.table.tables)
+    var occupied = []
+    // var occupied = Object.keys(this.props.table.tables)
     // var occupied = this.props.table.tables.keys.filter( (obj) => {obj} )
-    // for (let key in this.props.table.tables) {
-    //   this.props.table.tables[key].status === true ? occupied.push(this.props.table.tables[key]) : occupied
-    // }
+    for (let key in this.props.table.tables) {
+      this.props.table.tables[key].status === true ? occupied.push(this.props.table.tables[key]) : occupied
+    }
     this.setState({
       occupied: occupied
     })
