@@ -91,14 +91,14 @@ class Login extends React.Component {
           <TextInput
             onChangeText={(text) => this.setState({ username: text })}
             value={ this.state.username }
-            style={{ width: 300 }}
+            style={{ width: 300, color: 'white' }}
             placeholderTextColor='white'
             placeholder='Employee username'
           />
           <TextInput
             onChangeText={(text) => this.setState({ password: text })}
             value={ this.state.password }
-            style={{ width: 300 }}
+            style={{ width: 300, color: 'white' }}
             secureTextEntry={true}
             placeholderTextColor='white'
             placeholder='Password'

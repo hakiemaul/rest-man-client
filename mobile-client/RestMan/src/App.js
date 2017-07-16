@@ -6,11 +6,13 @@ import Login from './screens/Login'
 import WaiterDashboard from './screens/WaiterDashboard'
 import MenuSelection from './screens/MenuSelection'
 import CashierDashboard from './screens/CashierDashboard'
+import Transaction from './screens/Transaction'
 
 export default App = StackNavigator({
   Loading: { screen: Loading },
   Login: { screen: Login },
   WaiterDashboard: { screen: WaiterDashboard },
   MenuSelection: { screen: MenuSelection },
-  CashierDashboard: { screen: CashierDashboard }
+  CashierDashboard: { screen: CashierDashboard },
+  Transaction: { screen: Transaction }
 })

@@ -94,7 +94,7 @@ class CashierDashboard extends React.Component {
   _renderItem = ({ item }) => (
     <TouchableOpacity
       style={{ width: 300, borderWidth: 1, borderRadius: 10, padding: 20, marginBottom: 10, backgroundColor: '#443C35' }}
-      onPress={() => alert(item.name)}>
+      onPress={() => this.props.navigation.navigate('Transaction', { name: item.name })}>
       <Text style={styles.text}>Order {item.name}</Text>
       <Text style={{...styles.text, fontSize: 10 }}>Klik untuk menuju pembayaran</Text>
     </TouchableOpacity>
@@ -110,7 +110,7 @@ class CashierDashboard extends React.Component {
             data={this.state.occupied}
             renderItem={this._renderItem}
             keyExtractor={(item, index) => item.name}
-            style={{ marginTop: 30, width: 300 }}
+            style={{ marginTop: 30, width: 300, marginBottom: 50 }}
           />
         </View>
         <Button
