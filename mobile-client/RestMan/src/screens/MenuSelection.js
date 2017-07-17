@@ -127,7 +127,7 @@ class MenuSelection extends React.Component {
 
   _doneOrdering () {
     // AXIOS ACTION CREATE MENU-ORDER
-    Alert.alert( 'Konfirmasi Pesanan', 'Apakah pelanggan sudah selesai memesan? Apakah pelanggan sudah selesai memesan? Apakah pelanggan sudah selesai memesan?Apakah pelanggan sudah selesai memesan? Apakah pelanggan sudah selesai memesan? Apakah pelanggan sudah selesai memesan? Apakah pelanggan sudah selesai memesan?', [  {text: 'Cancel', onPress: () => {}, style: 'cancel'}, {text: 'OK', onPress: () => {
+    Alert.alert( 'Konfirmasi Pesanan', 'Apakah pelanggan sudah selesai memesan?', [  {text: 'Cancel', onPress: () => {}, style: 'cancel'}, {text: 'OK', onPress: () => {
       this.props.tableIsOrdering(this.state.table || this.state.free[0].name)
       // alert(this.state.table || this.state.free[0].name)
     }}, ], { cancelable: false } )

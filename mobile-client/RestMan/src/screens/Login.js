@@ -7,6 +7,10 @@ import {
   Button,
   AsyncStorage
 } from 'react-native'
+import {
+  FormLabel,
+  FormInput
+} from 'react-native-elements'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import { NavigationActions } from 'react-navigation'
@@ -116,6 +120,8 @@ class Login extends React.Component {
             placeholderTextColor='white'
             placeholder='Password'
           />
+          <FormLabel>Name</FormLabel>
+          <FormInput onChangeText={() => {}}/>
         </View>
         <View style={{ marginBottom: 50}}>
           <Button
