@@ -31,6 +31,8 @@ const styles = {
   }
 }
 
+const serv = 'http://localhost:3000'
+
 class Login extends React.Component {
   static navigationOptions = {
     title: 'Login Page'
@@ -50,16 +52,27 @@ class Login extends React.Component {
       alert('Please enter your username and password')
     } else {
       // axios action here
-      // axios.post('LOGIN_ENDPOINT')
+      // axios.get(serv + '/auth/login', {
+      //   username: self.state.username,
+      //   password: self.state.password
+      // })
       // .then(response => {
-      //   self.props.hasLoggedIn(response.data)
-      //   if (response.data.role === 'waiter') {
-      //     self.props.navigation.navigate('WaiterDashboard')
-      //   } else if (response.data.role === 'cashier') {
-      //     self.props.navigation.navigate('CashierDashboard')
-      //   } else if (response.data.role === 'admin') {
-      //     self.props.navigation.navigate('AdminDashboard')
+      //   let token = response.data.token
+      //   let user = {
+      //     username: response.data.username,
+      //     role: response.data.role
       //   }
+      //   AsyncStorage.setItem('token', token, () => {
+      //     AsyncStorage.setItem('user', JSON.stringify(user), () => {
+      //       const goLoad = NavigationActions.reset({
+      //         index: 0,
+      //         actions: [
+      //           NavigationActions.navigate({ routeName: 'Loading'})
+      //         ]
+      //       })
+      //       this.props.navigation.dispatch(goLoad)
+      //     })
+      //   })
       // })
       // .catch(err => console.log(err))
 

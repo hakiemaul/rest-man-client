@@ -56,7 +56,7 @@ class MenuSelection extends React.Component {
     this.state = {
       searchMenu: '',
       filtered: [],
-      table: '',
+      table: null,
       free: [],
       subtotal: 0
     }
@@ -127,8 +127,9 @@ class MenuSelection extends React.Component {
 
   _doneOrdering () {
     // AXIOS ACTION CREATE MENU-ORDER
-    Alert.alert( 'Konfirmasi Pesanan', 'Apakah pelanggan sudah selesai memesan?', [  {text: 'Cancel', onPress: () => {}, style: 'cancel'}, {text: 'OK', onPress: () => {
-      this.props.tableIsOrdering('Meja 2')
+    Alert.alert( 'Konfirmasi Pesanan', 'Apakah pelanggan sudah selesai memesan? Apakah pelanggan sudah selesai memesan? Apakah pelanggan sudah selesai memesan?Apakah pelanggan sudah selesai memesan? Apakah pelanggan sudah selesai memesan? Apakah pelanggan sudah selesai memesan? Apakah pelanggan sudah selesai memesan?', [  {text: 'Cancel', onPress: () => {}, style: 'cancel'}, {text: 'OK', onPress: () => {
+      this.props.tableIsOrdering(this.state.table || this.state.free[0].name)
+      // alert(this.state.table || this.state.free[0].name)
     }}, ], { cancelable: false } )
   }
 
@@ -151,7 +152,7 @@ class MenuSelection extends React.Component {
             <Text style={{...styles.text, fontSize: 15, marginLeft: 20, marginTop: 14, marginRight: 10}}>Nomor Meja</Text>
             <Picker
                 style={{width: 100}}
-                selectedValue={this.state.table}
+                selectedValue={this.state.free[0].name}
                 onValueChange={(tab) => this.setState({table: tab})}
                 mode='dropdown'>
               {this.state.free.map(table => (
