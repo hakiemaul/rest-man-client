@@ -94,7 +94,7 @@ class CashierDashboard extends React.Component {
   _renderItem = ({ item }) => (
     <TouchableOpacity
       style={{ width: 300, borderWidth: 1, borderRadius: 10, padding: 20, marginBottom: 10, backgroundColor: '#443C35' }}
-      onPress={() => this.props.navigation.navigate('Transaction', { name: item.name })}>
+      onPress={() => this.props.navigation.navigate('Transaction', { name: item.name, order: item.order })}>
       <Text style={styles.text}>Order {item.name}</Text>
       <Text style={{...styles.text, fontSize: 10 }}>Klik untuk menuju pembayaran</Text>
     </TouchableOpacity>

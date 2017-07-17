@@ -35,7 +35,7 @@ const styles = {
   }
 }
 
-const serv = 'http://localhost:3000'
+const serv = 'http://ec2-52-77-252-189.ap-southeast-1.compute.amazonaws.com:3000'
 
 class Login extends React.Component {
   static navigationOptions = {
@@ -56,47 +56,51 @@ class Login extends React.Component {
       alert('Please enter your username and password')
     } else {
       // axios action here
-      // axios.get(serv + '/auth/login', {
-      //   username: self.state.username,
-      //   password: self.state.password
-      // })
-      // .then(response => {
-      //   let token = response.data.token
-      //   let user = {
-      //     username: response.data.username,
-      //     role: response.data.role
-      //   }
-      //   AsyncStorage.setItem('token', token, () => {
-      //     AsyncStorage.setItem('user', JSON.stringify(user), () => {
-      //       const goLoad = NavigationActions.reset({
-      //         index: 0,
-      //         actions: [
-      //           NavigationActions.navigate({ routeName: 'Loading'})
-      //         ]
-      //       })
-      //       this.props.navigation.dispatch(goLoad)
-      //     })
-      //   })
-      // })
-      // .catch(err => console.log(err))
-
-      // mockup data
-      let token = '12i9301j239j2109i390'
-      let user = {
+      axios.post(serv + '/auth/login', {
         username: self.state.username,
-        role: 'waiter'
-      }
-      AsyncStorage.setItem('token', token, () => {
-        AsyncStorage.setItem('user', JSON.stringify(user), () => {
-          const goLoad = NavigationActions.reset({
-            index: 0,
-            actions: [
-              NavigationActions.navigate({ routeName: 'Loading'})
-            ]
+        password: self.state.password
+      })
+      .then(response => {
+        if (!response.data.token) {
+          alert('No user found')
+        }
+        let token = response.data.token
+        let user = {
+          username: response.data.username,
+          role: response.data.role.toLowerCase(),
+          id: response.data.id
+        }
+        AsyncStorage.setItem('token', token, () => {
+          AsyncStorage.setItem('user', JSON.stringify(user), () => {
+            const goLoad = NavigationActions.reset({
+              index: 0,
+              actions: [
+                NavigationActions.navigate({ routeName: 'Loading'})
+              ]
+            })
+            this.props.navigation.dispatch(goLoad)
           })
-          this.props.navigation.dispatch(goLoad)
         })
       })
+      .catch(err => console.log(err))
+
+      // mockup data
+      // let token = '12i9301j239j2109i390'
+      // let user = {
+      //   username: self.state.username,
+      //   role: 'waiter'
+      // }
+      // AsyncStorage.setItem('token', token, () => {
+      //   AsyncStorage.setItem('user', JSON.stringify(user), () => {
+      //     const goLoad = NavigationActions.reset({
+      //       index: 0,
+      //       actions: [
+      //         NavigationActions.navigate({ routeName: 'Loading'})
+      //       ]
+      //     })
+      //     this.props.navigation.dispatch(goLoad)
+      //   })
+      // })
     }
   }
 
@@ -120,8 +124,6 @@ class Login extends React.Component {
             placeholderTextColor='white'
             placeholder='Password'
           />
-          <FormLabel>Name</FormLabel>
-          <FormInput onChangeText={() => {}}/>
         </View>
         <View style={{ marginBottom: 50}}>
           <Button

@@ -5,7 +5,9 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case 'ADD_TO_ORDER':
-      return { orders: action.payload }
+      return { ...state, orders: action.payload }
+    case 'EMPTY_ORDER':
+      return { ...state, orders: []}
     default:
       return state
   }

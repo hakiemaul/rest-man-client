@@ -11,7 +11,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import { NavigationActions } from 'react-navigation'
 
-import { getTables } from '../actions'
+import { getTables, getMenus } from '../actions'
 
 const styles = {
   container: {
@@ -34,6 +34,7 @@ class Loading extends React.Component {
 
   componentDidMount () {
     this.props.getTables()
+    this.props.getMenus()
     AsyncStorage.getItem('token', (err, result) => {
       if (result === null) {
         const goLogin = NavigationActions.reset({
@@ -48,7 +49,7 @@ class Loading extends React.Component {
       } else {
         AsyncStorage.getItem('user', (err, result) => {
           let user = JSON.parse(result)
-          if (user.role === 'waiter') {
+          if (user.role === 'waiters') {
             const goWaiter = NavigationActions.reset({
               index: 0,
               actions: [
@@ -86,7 +87,8 @@ class Loading extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getTables: () => dispatch(getTables())
+    getTables: () => dispatch(getTables()),
+    getMenus: () => dispatch(getMenus())
   }
 }
 

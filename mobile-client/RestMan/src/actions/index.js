@@ -24,7 +24,7 @@ export const hasLoggedOut = () => {
 
 export const getMenus = () => {
   return dispatch => {
-    axios.get('READ_MENU_ENDPOINT')
+    axios.get('http://ec2-52-77-252-189.ap-southeast-1.compute.amazonaws.com:3000/menu')
     .then(response => {
       dispatch({
         type:'GET_MENUS',
@@ -38,6 +38,12 @@ export const addOrder = (orders) => {
   return {
     type: 'ADD_TO_ORDER',
     payload: orders
+  }
+}
+
+export const emptyOrder = () => {
+  return {
+    type: 'EMPTY_ORDER'
   }
 }
 
@@ -61,12 +67,13 @@ export const getTables = () => {
   }
 }
 
-export const tableIsOrdering = (table) => {
+export const tableIsOrdering = (table, order) => {
   return dispatch => {
     var tablesUpdate = firebase.database().ref('tables/' + table)
     tablesUpdate.set({
       name: table,
-      status: true
+      status: true,
+      order: order
     })
     tablesUpdate.off()
     dispatch({

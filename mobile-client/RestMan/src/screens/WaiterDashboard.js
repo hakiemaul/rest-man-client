@@ -57,24 +57,35 @@ class WaiterDashboard extends React.Component {
   _renderItem = ({ item }) => (
     <TouchableOpacity
       style={{ width: 300, borderWidth: 1, borderRadius: 10, padding: 20, marginBottom: 10, backgroundColor: '#443C35' }}
-      onPress={() => alert(item.name)}>
-      <Text style={styles.text}>Order {item.name}</Text>
+      onPress={() => alert('Ini harusnya ke detail' + item.name)}>
+      <Text style={styles.text}>{item.name}</Text>
       <Text style={{...styles.text, fontSize: 10 }}>Klik untuk lihat detail dan edit</Text>
     </TouchableOpacity>
   )
 
-  componentDidMount () {
+  _renderFree = ({ item }) => (
+    <TouchableOpacity
+      style={{ width: 300, borderWidth: 1, borderRadius: 10, padding: 20, marginBottom: 10, backgroundColor: '#443C35' }}
+      onPress={() => this._addOrder(item.name)}>
+      <Text style={styles.text}>{item.name}</Text>
+      <Text style={{...styles.text, fontSize: 10 }}>Klik untuk mulai pesanan</Text>
+    </TouchableOpacity>
+  )
+
+  componentWillMount () {
     AsyncStorage.getItem('user', (err, result) => {
       const user = JSON.parse(result)
       this.setState({
         username: user.username
       })
       var occupied = []
+      var free = []
       for (let key in this.props.table.tables) {
-        this.props.table.tables[key].status === true ? occupied.push(this.props.table.tables[key]) : occupied
+        this.props.table.tables[key].status === true ? occupied.push(this.props.table.tables[key]) : free.push(this.props.table.tables[key])
       }
       this.setState({
-        occupied: occupied
+        occupied: occupied,
+        free: free
       })
     })
   }
@@ -82,11 +93,13 @@ class WaiterDashboard extends React.Component {
   componentWillReceiveProps () {
     setTimeout(() => {
       var occupied = []
+      var free = []
       for (let key in this.props.table.tables) {
-        this.props.table.tables[key].status === true ? occupied.push(this.props.table.tables[key]) : occupied
+        this.props.table.tables[key].status === true ? occupied.push(this.props.table.tables[key]) : free.push(this.props.table.tables[key])
       }
       this.setState({
-        occupied: occupied
+        occupied: occupied,
+        free: free
       })
     }, 3000)
   }
@@ -111,15 +124,24 @@ class WaiterDashboard extends React.Component {
     })
   }
 
-  _addOrder () {
+  _addOrder (table) {
     // AXIOS CREATE ORDER
-    this.props.navigation.navigate('MenuSelection')
+    this.props.navigation.navigate('MenuSelection', { table: table })
   }
 
   render () {
     return (
       <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'space-around', alignItems: 'center'}}>
         <Text style={{...styles.text, marginTop: 20, marginBottom: 20}}>Selamat bekerja, {this.state.username}</Text>
+        <View style={{...styles.listContainer, marginBottom: 10}}>
+          <Text style={styles.text}>Belum Order</Text>
+          <FlatList
+            data={this.state.free}
+            renderItem={this._renderFree}
+            keyExtractor={(item, index) => item.name}
+            style={{marginBottom: 30, marginTop: 30}}
+          />
+        </View>
         <View style={styles.listContainer}>
           <Text style={styles.text}>Order Aktif</Text>
           <FlatList
@@ -128,13 +150,6 @@ class WaiterDashboard extends React.Component {
             keyExtractor={(item, index) => item.name}
             style={{marginBottom: 30, marginTop: 30}}
           />
-          <View style={{alignItems: 'center', flexDirection: 'row', justifyContent: 'center'}}>
-            <TouchableHighlight
-              style={ styles.imageContainer2 }
-              onPress={() => this._addOrder()}>
-              <Image style={ styles.image } source={{ uri: 'https://cdn4.iconfinder.com/data/icons/vectory-bonus-3/40/button_add-512.png' }} />
-            </TouchableHighlight>
-          </View>
         </View>
         <Button
           onPress={() => this._doLogout() }

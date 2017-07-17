@@ -3,7 +3,8 @@ const initialState = {
     'Meja 1': {
       id: 1,
       name: 'Meja 1',
-      status: false
+      status: false,
+      listMenuItems: []
     },
     'Meja 2': {
       id: 2,
@@ -41,6 +42,15 @@ export default (state = initialState, action) => {
       return { ...state, tables: newStatus }
     case 'GET_TABLES':
       return { ...state, tables: action.payload }
+    case 'TABLE_IS_DONE':
+      const newDone = Object.assign({}, state.tables)
+      // newDone.map(table => {
+      //   (table.name == action.payload) ? table.status = true : table
+      // })
+      for (let key in newDone) {
+        (newDone[key].name === action.payload) ? (newDone[key].status = false) : newDone
+      }
+      return { ...state, tables: newDone }
     default:
       return state
   }
