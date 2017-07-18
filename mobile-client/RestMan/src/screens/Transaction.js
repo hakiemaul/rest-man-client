@@ -111,7 +111,9 @@ class Transaction extends React.Component {
                 <View style={styles.user}>
                   <View>
                     <Text style={styles.name}>{u.name}</Text>
-                    <Text style={styles.price}>{u.name}</Text>
+                    <Text style={styles.price}>Rp <FormattedNumber
+                      value={u.price}
+                      minimumFractionDigits={2} /></Text>
                   </View>
                   <Text style={styles.price}>Qty: {u.MenuOrder.qty_item}</Text>
                 </View>
@@ -137,9 +139,13 @@ class Transaction extends React.Component {
           placeholderTextColor='#000'
           placeholder='Jumlah bayar'
           keyboardType='phone-pad'/>
-        <Text style={styles.text}>Kembali Rp <FormattedNumber
-          value={this.state.change}
-          minimumFractionDigits={2} /></Text>
+        <Text style={styles.text}>Kembali Rp
+          {(this.state.change >= 0) ? (<Text> <FormattedNumber
+            value={this.state.change}
+            minimumFractionDigits={2} /></Text>) : (<Text> <FormattedNumber
+              value={0}
+              minimumFractionDigits={2} /></Text>)}
+        </Text>
         <View style={{ marginBottom: 50}}>
           <Button
           raised
