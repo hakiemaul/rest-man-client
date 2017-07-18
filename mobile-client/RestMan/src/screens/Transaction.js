@@ -3,7 +3,8 @@ import {
   View,
   Text,
   TextInput,
-  ScrollView
+  ScrollView,
+  Alert
 } from 'react-native'
 import axios from 'axios'
 import { Card, ListItem, Button, Icon, FormInput, FormLabel } from 'react-native-elements'
@@ -81,6 +82,23 @@ class Transaction extends React.Component {
     }
   }
 
+  _cancelOrder () {
+    Alert.alert( 'Konfirmasi Pembatalan', 'Apakah transaksi dibatalkan?', [  {text: 'Cancel', onPress: () => {}, style: 'cancel'}, {text: 'OK', onPress: () => {
+      let self = this
+      axios.delete(serv + '/order/' + this.state.id)
+      .then(response => {
+        self.props.tableIsDone(self.props.navigation.state.params.name)
+        const goCashier = NavigationActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({ routeName: 'CashierDashboard'})
+          ]
+        })
+        self.props.navigation.dispatch(goCashier)
+      })
+    }}, ], { cancelable: true } )
+  }
+
   render () {
     return (
       <ScrollView style={styles.container}>
@@ -135,7 +153,7 @@ class Transaction extends React.Component {
           <Button
           raised
           icon={{name: 'delete'}}
-          onPress={() => {}}
+          onPress={() => this._cancelOrder()}
           title='BATAL PESAN'
           backgroundColor='red'
           />
