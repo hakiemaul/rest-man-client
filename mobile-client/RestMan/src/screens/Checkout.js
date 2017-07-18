@@ -128,12 +128,18 @@ class Checkout extends React.Component {
                 <Text></Text>
               </View>
             </Card>
-            <Button
+            {(this.state.subtotal > 0) ? (<Button
               raised
               icon={{name: 'shopping-cart'}}
               onPress={() => this._doneOrdering()}
               title='SELESAI'
-              backgroundColor='#73a4f4' />
+              backgroundColor='#73a4f4' />) : (<Button
+                raised
+                disabled
+                icon={{name: 'shopping-cart'}}
+                onPress={() => this._doneOrdering()}
+                title='SELESAI'
+                backgroundColor='#73a4f4' />)}
           </View>
         )}
         renderStickyHeader={() => (
