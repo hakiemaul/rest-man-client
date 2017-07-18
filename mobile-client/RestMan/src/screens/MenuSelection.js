@@ -95,16 +95,19 @@ class MenuSelection extends React.Component {
     <View style={styles.card}>
       <TouchableOpacity onPress={() => {}}>
         <Text style={{...styles.text, fontWeight: 'bold', fontSize: 15}}>{ item.name }</Text>
-        <Text style={{...styles.text, fontStyle: 'italic', fontSize: 12}}>{ item.description }</Text>
+        <Text numberOfLines={1} style={{...styles.text, fontStyle: 'italic', fontSize: 12}}>{ item.description }</Text>
         <Text style={{...styles.text, fontSize: 12}}>Rp { item.price }</Text>
       </TouchableOpacity>
       { this.props.orders.some((_item) => { return _item.name == item.name}) ? (
+        <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
+        <Text style={{...styles.text, fontSize: 12}}>Jumlah pesanan: </Text>
         <Button
           onPress={() => this._addOrder(item) }
-          title="Sudah pernah order"
-          color="green"
+          title="Sudah order"
+          color="#73a4f4"
           accessibilityLabel="Do your job!"
         />
+        </View>
       ) : <Button
         onPress={() => this._addOrder(item) }
         title="Add to Order"
@@ -193,6 +196,10 @@ class MenuSelection extends React.Component {
     }}, ], { cancelable: false } )
   }
 
+  _goNext () {
+    this.props.navigation.navigate('Checkout', { table: this.props.navigation.state.params.table })
+  }
+
   componentDidMount () {
     AsyncStorage.getItem('user', (err, result) => {
       const user = JSON.parse(result)
@@ -203,9 +210,22 @@ class MenuSelection extends React.Component {
       for (let key in this.props.table.tables) {
         this.props.table.tables[key].status === false ? free.push(this.props.table.tables[key]) : free
       }
+      let price = this.props.orders.reduce((sum, value) => {
+        return sum + (value.price * value.qty_item)
+      }, 0)
       this.setState({
-        free: free
+        free: free,
+        subtotal: price
       })
+    })
+  }
+
+  componentWillReceiveProps () {
+    let price = this.props.orders.reduce((sum, value) => {
+      return sum + (value.price * value.qty_item)
+    }, this.state.subtotal)
+    this.setState({
+      subtotal: price
     })
   }
 
@@ -228,7 +248,14 @@ class MenuSelection extends React.Component {
               style={{marginTop: 30, marginLeft: 44}}
             />
           </View>
-          <Text style={{...styles.text, margin: 20}}>Subtotal: Rp {this.state.subtotal}</Text>
+          <View style={{ marginLeft: width/2.5}}>
+          <Button
+            onPress={() => this._goNext() }
+            title="Lanjut"
+            color="darkblue"
+            accessibilityLabel="Do your job!"
+          />
+          </View>
         </View>
       )
     } else {
@@ -249,11 +276,10 @@ class MenuSelection extends React.Component {
               style={{marginTop: 30, marginLeft: 44}}
             />
           </View>
-          <Text style={{...styles.text, margin: 20}}>Subtotal: Rp {this.state.subtotal}</Text>
-          <View style={{ marginLeft: width/2}}>
+          <View style={{ marginLeft: width/2.5, marginTop: 20 }}>
           <Button
-            onPress={() => this._doneOrdering() }
-            title="Selesai Memesan"
+            onPress={() => this._goNext() }
+            title="Lanjut"
             color="darkblue"
             accessibilityLabel="Do your job!"
           />
