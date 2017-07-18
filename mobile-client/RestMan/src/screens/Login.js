@@ -7,6 +7,10 @@ import {
   Button,
   AsyncStorage
 } from 'react-native'
+import {
+  FormLabel,
+  FormInput
+} from 'react-native-elements'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import { NavigationActions } from 'react-navigation'
@@ -19,7 +23,7 @@ const styles = {
     justifyContent: 'space-between',
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: '#4EA384',
+    backgroundColor: '#FC7100',
   },
   welcome: {
     fontSize: 30,
@@ -31,7 +35,13 @@ const styles = {
   }
 }
 
+const serv = 'http://ec2-52-77-252-189.ap-southeast-1.compute.amazonaws.com:3000'
+
 class Login extends React.Component {
+  static navigationOptions = {
+    title: 'Login Page'
+  }
+
   constructor () {
     super ()
     this.state = {
@@ -46,36 +56,51 @@ class Login extends React.Component {
       alert('Please enter your username and password')
     } else {
       // axios action here
-      // axios.post('LOGIN_ENDPOINT')
-      // .then(response => {
-      //   self.props.hasLoggedIn(response.data)
-      //   if (response.data.role === 'waiter') {
-      //     self.props.navigation.navigate('WaiterDashboard')
-      //   } else if (response.data.role === 'cashier') {
-      //     self.props.navigation.navigate('CashierDashboard')
-      //   } else if (response.data.role === 'admin') {
-      //     self.props.navigation.navigate('AdminDashboard')
-      //   }
-      // })
-      // .catch(err => console.log(err))
-
-      // mockup data
-      let token = '12i9301j239j2109i390'
-      let user = {
+      axios.post(serv + '/auth/login', {
         username: self.state.username,
-        role: 'waiter'
-      }
-      AsyncStorage.setItem('token', token, () => {
-        AsyncStorage.setItem('user', JSON.stringify(user), () => {
-          const goWaiter = NavigationActions.reset({
-            index: 0,
-            actions: [
-              NavigationActions.navigate({ routeName: 'WaiterDashboard'})
-            ]
+        password: self.state.password
+      })
+      .then(response => {
+        if (!response.data.token) {
+          alert('No user found')
+        }
+        let token = response.data.token
+        let user = {
+          username: response.data.username,
+          role: response.data.role.toLowerCase(),
+          id: response.data.id
+        }
+        AsyncStorage.setItem('token', token, () => {
+          AsyncStorage.setItem('user', JSON.stringify(user), () => {
+            const goLoad = NavigationActions.reset({
+              index: 0,
+              actions: [
+                NavigationActions.navigate({ routeName: 'Loading'})
+              ]
+            })
+            this.props.navigation.dispatch(goLoad)
           })
-          this.props.navigation.dispatch(goWaiter)
         })
       })
+      .catch(err => console.log(err))
+
+      // mockup data
+      // let token = '12i9301j239j2109i390'
+      // let user = {
+      //   username: self.state.username,
+      //   role: 'waiter'
+      // }
+      // AsyncStorage.setItem('token', token, () => {
+      //   AsyncStorage.setItem('user', JSON.stringify(user), () => {
+      //     const goLoad = NavigationActions.reset({
+      //       index: 0,
+      //       actions: [
+      //         NavigationActions.navigate({ routeName: 'Loading'})
+      //       ]
+      //     })
+      //     this.props.navigation.dispatch(goLoad)
+      //   })
+      // })
     }
   }
 
@@ -87,14 +112,16 @@ class Login extends React.Component {
           <TextInput
             onChangeText={(text) => this.setState({ username: text })}
             value={ this.state.username }
-            style={{ width: 300 }}
+            style={{ width: 300, color: 'white' }}
+            placeholderTextColor='white'
             placeholder='Employee username'
           />
           <TextInput
             onChangeText={(text) => this.setState({ password: text })}
             value={ this.state.password }
-            style={{ width: 300 }}
+            style={{ width: 300, color: 'white' }}
             secureTextEntry={true}
+            placeholderTextColor='white'
             placeholder='Password'
           />
         </View>
@@ -102,8 +129,9 @@ class Login extends React.Component {
           <Button
             onPress={() => this._doLogin() }
             title="Login"
-            color="#841584"
+            color="#443C35"
             accessibilityLabel="Do your job!"
+            style={{width: 200}}
           />
         </View>
       </View>

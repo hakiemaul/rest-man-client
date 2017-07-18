@@ -19,11 +19,10 @@ const initialState = {
 }
 
 export default (state = initialState, action) => {
-  // switch (action.type) {
-  //   case 'GET_MENUS':
-  //     return { ...state, menu: action.payload }
-  //   default:
-  //     return state
-  // }
-  return state
+  switch (action.type) {
+    case 'GET_MENUS':
+      return { ...state, menus: action.payload }
+    default:
+      return state
+  }
 }
