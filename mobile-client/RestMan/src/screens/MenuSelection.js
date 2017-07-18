@@ -51,7 +51,7 @@ const styles = {
     borderWidth: 0.5,
     borderRadius: 6,
     padding: 15,
-    marginBottom: 30,
+    marginBottom: 20,
     justifyContent: 'space-between'
   },
   text: {
@@ -175,6 +175,10 @@ class MenuSelection extends React.Component {
     }
   }
 
+  _clearOrder () {
+    this.props.emptyOrder()
+  }
+
   _doneOrdering () {
     // AXIOS ACTION CREATE MENU-ORDER
     Alert.alert( 'Konfirmasi Pesanan', 'Apakah pelanggan sudah selesai memesan?', [  {text: 'Cancel', onPress: () => {}, style: 'cancel'}, {text: 'OK', onPress: () => {
@@ -236,7 +240,6 @@ class MenuSelection extends React.Component {
   render () {
     if (this.state.searchMenu.length > 0) {
       return (
-        <FormattedWrapper locale="id">
         <View style={styles.container}>
           <TextInput
             onChangeText={(text) => this._searchReal(text)}
@@ -253,7 +256,13 @@ class MenuSelection extends React.Component {
               style={{marginTop: 30, marginLeft: 44}}
             />
           </View>
-          <View style={{ marginLeft: width/2.5}}>
+          <View style={{ width: width, flexDirection: 'row', justifyContent: 'space-around', marginBottom: 10, marginTop: 10 }}>
+          <Button
+            onPress={() => this._clearOrder() }
+            title="Clear Order"
+            color="gray"
+            accessibilityLabel="Do your job!"
+          />
           <Button
             onPress={() => this._goNext() }
             title="Lanjut"
@@ -262,11 +271,9 @@ class MenuSelection extends React.Component {
           />
           </View>
         </View>
-        </FormattedWrapper>
       )
     } else {
       return (
-        <FormattedWrapper locale="id">
         <View style={styles.container}>
           <TextInput
             onChangeText={(text) => this._searchReal(text)}
@@ -275,7 +282,7 @@ class MenuSelection extends React.Component {
             placeholder='Nama menu'
           />
           <View style={styles.listContainer}>
-            <Text style={{...styles.text, marginLeft: 20, fontSize: 15}}>Pesanan</Text>
+            <Text style={{...styles.text, marginLeft: 20, fontSize: 15}}>Daftar Menu</Text>
             <FlatList
               data={this.props.menu.menus}
               renderItem={this._allMenu}
@@ -283,7 +290,13 @@ class MenuSelection extends React.Component {
               style={{marginTop: 30, marginLeft: 44}}
             />
           </View>
-          <View style={{ marginLeft: width/2.5, marginTop: 20 }}>
+          <View style={{ width: width, flexDirection: 'row', justifyContent: 'space-around', marginBottom: 10, marginTop: 10 }}>
+          <Button
+            onPress={() => this._clearOrder() }
+            title="Clear Order"
+            color="gray"
+            accessibilityLabel="Do your job!"
+          />
           <Button
             onPress={() => this._goNext() }
             title="Lanjut"
@@ -292,7 +305,6 @@ class MenuSelection extends React.Component {
           />
           </View>
         </View>
-        </FormattedWrapper>
       )
     }
   }
