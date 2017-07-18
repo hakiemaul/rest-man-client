@@ -5,6 +5,7 @@ import ParallaxScrollView from 'react-native-parallax-scroll-view'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import { NavigationActions } from 'react-navigation'
+import { FormattedWrapper, FormattedNumber } from 'react-native-globalize'
 
 import { addOrder, tableIsOrdering, emptyOrder } from '../actions'
 
@@ -62,7 +63,7 @@ class Checkout extends React.Component {
       return d
     })
     let edited2 = this.props.orders.filter((d) => {
-      return d.qty_item > 0
+      return d.qty_item >= 0
     })
     this.props.addOrder(edited2)
     let total = this.state.subtotal - this.props.orders[index].price
@@ -75,12 +76,15 @@ class Checkout extends React.Component {
     // AXIOS ACTION CREATE MENU-ORDER
     Alert.alert( 'Konfirmasi Pesanan', 'Apakah pelanggan sudah selesai memesan?', [  {text: 'Cancel', onPress: () => {}, style: 'cancel'}, {text: 'OK', onPress: () => {
       let self = this
+      let edited = this.props.orders.filter((d) => {
+        return d.qty_item > 0
+      })
       // alert(this.state.table || this.state.free[0].name)
       axios.post(serv + '/order', {
         no_meja: this.props.navigation.state.params.table,
         id_employee: this.state.id,
         total_price: this.state.subtotal,
-        menu_order: this.props.orders
+        menu_order: edited
       })
       .then(response => {
         self.props.tableIsOrdering(self.props.navigation.state.params.table, response.data.id)
@@ -113,12 +117,14 @@ class Checkout extends React.Component {
     return (
       <ParallaxScrollView
         parallaxHeaderHeight={200}
-        backgroundColor="white"
+        backgroundColor='white'
         renderForeground={() => (
           <View style={{ height: 300, flex: 1 }}>
             <Card title="RINGKASAN" containerStyle={{padding: 20}} >
               <View>
-                <Text>Subtotal Rp {this.state.subtotal}</Text>
+                <Text>Subtotal Rp <FormattedNumber
+                  value={this.state.subtotal}
+                  minimumFractionDigits={2} /></Text>
                 <Text></Text>
               </View>
             </Card>
@@ -132,7 +138,9 @@ class Checkout extends React.Component {
         )}
         renderStickyHeader={() => (
           <View style={{ height: 40, backgroundColor: "#73a4f4", padding: 10 }}>
-            <Text>Subtotal Rp {this.state.subtotal}</Text>
+            <Text style={{ color: '#fff' }}>Subtotal Rp <FormattedNumber
+              value={this.state.subtotal}
+              minimumFractionDigits={2} /></Text>
           </View>
         )}
         stickyHeaderHeight={40}>
@@ -146,15 +154,17 @@ class Checkout extends React.Component {
                     <Text style={styles.name}>{u.name}</Text>
                     <Text style={styles.price}>{u.name}</Text>
                   </View>
-                  <Text style={styles.price}>Rp {u.price}</Text>
+                  <Text style={styles.price}>Rp <FormattedNumber
+                    value={u.price}
+                    minimumFractionDigits={2} /></Text>
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                  <Icon
+                  {u.qty_item>0 ? (<Icon
                     raised
                     name='remove'
                     color='#f50'
                     style={10}
-                    onPress={() => this._remQty(u, i)} />
+                    onPress={() => this._remQty(u, i)} />) : (<View></View>)}
                   <Text style={{marginLeft: 10, marginRight: 10}}>{u.qty_item}</Text>
                   <Icon
                     raised

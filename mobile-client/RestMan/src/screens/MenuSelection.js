@@ -21,6 +21,7 @@ import {
 import { connect } from 'react-redux'
 import axios from 'axios'
 import { NavigationActions } from 'react-navigation'
+import { FormattedWrapper, FormattedNumber } from 'react-native-globalize'
 
 import { addOrder, isOrdering, tableIsOrdering, emptyOrder } from '../actions'
 
@@ -96,7 +97,10 @@ class MenuSelection extends React.Component {
       <TouchableOpacity onPress={() => {}}>
         <Text style={{...styles.text, fontWeight: 'bold', fontSize: 15}}>{ item.name }</Text>
         <Text numberOfLines={1} style={{...styles.text, fontStyle: 'italic', fontSize: 12}}>{ item.description }</Text>
-        <Text style={{...styles.text, fontSize: 12}}>Rp { item.price }</Text>
+        <Text style={{...styles.text, fontSize: 12}}>Rp <FormattedNumber
+          value={item.price}
+          minimumFractionDigits={2}
+          style={{ color: '#fff' }} /></Text>
       </TouchableOpacity>
       { this.props.orders.some((_item) => { return _item.name == item.name}) ? (
         <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
@@ -232,6 +236,7 @@ class MenuSelection extends React.Component {
   render () {
     if (this.state.searchMenu.length > 0) {
       return (
+        <FormattedWrapper locale="id">
         <View style={styles.container}>
           <TextInput
             onChangeText={(text) => this._searchReal(text)}
@@ -257,9 +262,11 @@ class MenuSelection extends React.Component {
           />
           </View>
         </View>
+        </FormattedWrapper>
       )
     } else {
       return (
+        <FormattedWrapper locale="id">
         <View style={styles.container}>
           <TextInput
             onChangeText={(text) => this._searchReal(text)}
@@ -285,6 +292,7 @@ class MenuSelection extends React.Component {
           />
           </View>
         </View>
+        </FormattedWrapper>
       )
     }
   }

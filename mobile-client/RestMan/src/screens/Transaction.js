@@ -3,28 +3,35 @@ import {
   View,
   Text,
   TextInput,
-  Button
+  ScrollView
 } from 'react-native'
 import axios from 'axios'
+import { Card, ListItem, Button, Icon, FormInput, FormLabel } from 'react-native-elements'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
+import { FormattedNumber } from 'react-native-globalize'
 
 import { tableIsDone } from '../actions'
 
 const serv = 'http://ec2-52-77-252-189.ap-southeast-1.compute.amazonaws.com:3000'
 
 const styles = {
+  user: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10
+  },
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#FC7100',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start'
+  },
+  name: {
+    fontWeight: 'bold'
   },
   text: {
-    color: '#FFF',
+    color: '#000',
     fontSize: 20,
-    margin: 10
+    margin: 20
   }
 }
 
@@ -45,43 +52,61 @@ class Transaction extends React.Component {
       this.setState({
         id: response.data.id,
         orders: response.data.Menus,
-        total: response.data.total_price
+        total: response.data.total_price,
+        change: -response.data.total_price
       })
     })
   }
 
   _doPay () {
-    let self = this
-    axios.post(serv + '/transaction', {
-      id_order: this.state.id,
-      pay: this.state.pay,
-      refund: this.state.change
-    })
-    .then(response => {
-      self.props.tableIsDone(self.props.navigation.state.params.name)
-      const goCashier = NavigationActions.reset({
-        index: 0,
-        actions: [
-          NavigationActions.navigate({ routeName: 'CashierDashboard'})
-        ]
+    if (this.state.change >= 0) {
+      let self = this
+      axios.post(serv + '/transaction', {
+        id_order: this.state.id,
+        pay: this.state.pay,
+        refund: this.state.change
       })
-      self.props.navigation.dispatch(goCashier)
-    })
+      .then(response => {
+        self.props.tableIsDone(self.props.navigation.state.params.name)
+        const goCashier = NavigationActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({ routeName: 'CashierDashboard'})
+          ]
+        })
+        self.props.navigation.dispatch(goCashier)
+      })
+    } else {
+      alert('Pembayaran belum cukup!')
+    }
   }
 
   render () {
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <Text style={styles.text}>Detail Transaksi {this.props.navigation.state.params.name}</Text>
-        {this.state.orders.map(order => (
-          <View key={order.id}>
-            <Text>{order.name}</Text>
-            <Text>{order.MenuOrder.qty_item}</Text>
-            <Text>{order.price}</Text>
-          </View>
-        ))}
-        <Text style={styles.text}>Total harga {this.state.total}</Text>
-        <TextInput
+        <Card title="ITEMS" containerStyle={{padding: 20}} >
+        {
+          this.state.orders.map((u, i) => {
+            return (
+              <View key={i} style={{marginBottom: 10}}>
+                <View style={styles.user}>
+                  <View>
+                    <Text style={styles.name}>{u.name}</Text>
+                    <Text style={styles.price}>{u.name}</Text>
+                  </View>
+                  <Text style={styles.price}>Qty: {u.MenuOrder.qty_item}</Text>
+                </View>
+              </View>
+            );
+          })
+        }
+        </Card>
+        <Text style={styles.text}>Total harga Rp <FormattedNumber
+          value={this.state.total}
+          minimumFractionDigits={2} /></Text>
+        <FormLabel>Pembayaran</FormLabel>
+        <FormInput
           onChangeText={(text) => this.setState({ pay: text })}
           onSubmitEditing={() => {
             let change = this.state.pay - this.state.total
@@ -90,22 +115,32 @@ class Transaction extends React.Component {
             })
           }}
           value={ this.state.pay.toString() }
-          style={{ width: 300, color: 'white' }}
-          placeholderTextColor='white'
+          style={{fontSize: 20, color: '#000' }}
+          placeholderTextColor='#000'
           placeholder='Jumlah bayar'
-          keyboardType='phone-pad'
-        />
-        <Text style={styles.text}>Kembali {this.state.change}</Text>
+          keyboardType='phone-pad'/>
+        <Text style={styles.text}>Kembali Rp <FormattedNumber
+          value={this.state.change}
+          minimumFractionDigits={2} /></Text>
         <View style={{ marginBottom: 50}}>
           <Button
-            onPress={() => this._doPay() }
-            title="Bayar"
-            color="#443C35"
-            accessibilityLabel="Do your job!"
-            style={{width: 200}}
+          raised
+          icon={{name: 'monetization-on'}}
+          onPress={() => this._doPay()}
+          title='BAYAR'
+          backgroundColor='#2fad4c'
           />
         </View>
-      </View>
+        <View style={{ marginBottom: 50}}>
+          <Button
+          raised
+          icon={{name: 'delete'}}
+          onPress={() => {}}
+          title='BATAL PESAN'
+          backgroundColor='red'
+          />
+        </View>
+      </ScrollView>
     )
   }
 }
