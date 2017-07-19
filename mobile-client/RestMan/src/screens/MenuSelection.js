@@ -61,6 +61,13 @@ const styles = {
 class MenuSelection extends React.Component {
   static navigationOptions = ({navigation}) => ({
     title: `Pemesanan ${navigation.state.params.table}`,
+    headerTitleStyle: {
+      color: '#fff'
+    },
+    headerStyle: {
+      backgroundColor: '#253951'
+    },
+    headerTintColor: '#fff'
   })
 
   constructor () {

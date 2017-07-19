@@ -37,6 +37,17 @@ const styles = {
 }
 
 class Transaction extends React.Component {
+  static navigationOptions = ({navigation}) => ({
+    title: `Detail Transaksi ${navigation.state.params.name}`,
+    headerTitleStyle: {
+      color: '#fff'
+    },
+    headerStyle: {
+      backgroundColor: '#253951'
+    },
+    headerTintColor: '#fff'
+  })
+
   constructor () {
     super ()
     this.state = {

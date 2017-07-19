@@ -43,7 +43,13 @@ const styles = {
 
 class WaiterDashboard extends React.Component {
   static navigationOptions = {
-    title: 'Halaman Waiter'
+    title: 'Halaman Waiter',
+    headerTitleStyle: {
+      color: '#fff'
+    },
+    headerStyle: {
+      backgroundColor: '#253951'
+    }
   }
 
   constructor () {

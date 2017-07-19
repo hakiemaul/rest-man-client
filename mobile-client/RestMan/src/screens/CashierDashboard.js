@@ -34,7 +34,13 @@ const styles = {
 
 class CashierDashboard extends React.Component {
   static navigationOptions = {
-    title: 'Halaman Kasir'
+    title: 'Halaman Kasir',
+    headerTitleStyle: {
+      color: '#fff'
+    },
+    headerStyle: {
+      backgroundColor: '#253951'
+    }
   }
 
   constructor () {
