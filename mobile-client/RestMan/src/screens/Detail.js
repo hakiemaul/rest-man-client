@@ -196,7 +196,6 @@ class Detail extends React.Component {
                 <View style={styles.user}>
                   <View>
                     <Text style={styles.name}>{u.name}</Text>
-                    <Text numberOfLines={1} style={styles.price}>{u.description}</Text>
                   </View>
                   <Text style={styles.price}>Rp <FormattedNumber
                     value={u.price}

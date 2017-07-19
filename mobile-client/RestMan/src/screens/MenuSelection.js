@@ -46,7 +46,7 @@ const styles = {
     alignItems: 'flex-start',
   },
   card: {
-    height: 130,
+    height: 150,
     width: cardWidth,
     backgroundColor: '#253951',
     padding: 15,

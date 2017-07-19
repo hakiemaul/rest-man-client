@@ -56,8 +56,7 @@ class WaiterDashboard extends React.Component {
   constructor () {
     super ()
     this.state = {
-      username: '',
-      occupied: []
+      username: ''
     }
   }
 
@@ -144,14 +143,14 @@ class WaiterDashboard extends React.Component {
     return (
       <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'space-around', alignItems: 'center'}}>
         <Text style={{...styles.text, marginTop: 20, marginBottom: 20}}>Selamat bekerja, {this.state.username}</Text>
-        <View style={{...styles.listContainer, marginBottom: 10, width: 300 }}>
+        <View style={{...styles.listContainer, marginBottom: 50, width: 300 }}>
           <Text style={styles.text}>Belum Order</Text>
-          {(this.state.free) ? (<FlatList
+          {(this.state.free) ? ((this.state.free.length > 0) ? (<FlatList
             data={this.state.free}
             renderItem={this._renderFree}
             keyExtractor={(item, index) => item.name}
-            style={{marginBottom: 30, marginTop: 30}}
-          />) : (<ActivityIndicator size='large' />)}
+            style={{ marginTop: 30}}
+          />) : (<Text style={{...styles.text, fontSize: 12}}>Semua meja telah memesan</Text>)) : (<ActivityIndicator size='large' />)}
         </View>
         <View style={{...styles.listContainer, marginBottom: 50, width: 300}}>
           <Text style={styles.text}>Order Aktif</Text>
