@@ -1,31 +1,30 @@
 import React from 'react'
-import { Button, Form,Breadcrumb } from 'semantic-ui-react'
+import { Button, Form,Header } from 'semantic-ui-react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
 
 import { addAction } from '../actions/addAction'
 
-class UserAdd extends React.Component {
+class UserEdit extends React.Component {
 
   constructor(){
     super()
-    this.state = {username:'',role:''}
+    this.state = {name:'',category:''}
   }
 
   handleSubmit(e){
     e.preventDefault()
-    var add_to = 'users'
-    this.props.addUser(this.state,add_to)
+    var add_to = 'menu'
+    this.props.addMenu(this.state,add_to)
     this.props.history.push('/users');
   }
 
   handleChange(e,type){
-    if(type==='username'){
+    if(type==='name'){
 
-      this.setState({username:e.target.value})
-    }else if(type==='role'){
+      this.setState({name:e.target.value})
+    }else if(type==='category'){
 
-      this.setState({role:e.target.value})
+      this.setState({category:e.target.value})
     }else {
       console.log('error');
     }
@@ -34,14 +33,8 @@ class UserAdd extends React.Component {
   render(){
     return (
       <div>
-      <Breadcrumb size='big'>
-        <Link to={{pathname:`/users`}}>
-          <Breadcrumb.Section link>Users</Breadcrumb.Section>
-        </Link>
-        <Breadcrumb.Divider icon='right chevron' />
-        <Breadcrumb.Section active>Add</Breadcrumb.Section>
-      </Breadcrumb>
-        <div style={{marginTop:20}}>
+      <Header as='h3'>Edit User</Header>
+        <div>
           <Form onSubmit={(e)=>this.handleSubmit(e)}>
             <Form.Field >
               <label>Name</label>
@@ -51,7 +44,7 @@ class UserAdd extends React.Component {
               <label>category</label>
               <input onChange={(e) => { this.handleChange(e,'category') }} value = { this.state.category } placeholder='category' />
             </Form.Field>
-                <Button type='submit'>Add</Button>
+                <Button type='submit'>Simpan</Button>
           </Form>
         </div>
       </div>
@@ -62,9 +55,9 @@ class UserAdd extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
   return{
-    addUser: (data,add_to) => dispatch(addAction(data,'users'))
+    addMenu: (data,add_to) => dispatch(addAction(data,add_to))
   }
 }
 
 
-export default connect (null,mapDispatchToProps)(UserAdd)
+export default connect (null,mapDispatchToProps)(UserEdit)

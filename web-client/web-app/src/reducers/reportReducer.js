@@ -1,102 +1,14 @@
 const initial_state = {
-  transactions : [{
-    id:'asdf1',
-    total:20000
-  },{
-    id:'asdf2',
-    total:30000
-  },{
-    id:'asdf3',
-    total:40000
-  },{
-    id:'asdf4',
-    total:50000
-  },{
-    id:'asdf5',
-    total:50000
-  },{
-    id:'asdf6',
-    total:50000
-  },{
-    id:'asdf7',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },
-  {
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  },{
-    id:'asdf8',
-    total:50000
-  }]
+  report : []
 }
 
 export default (state=initial_state,action) => {
   switch (action.type) {
-    case 'GET_TRANSACTION_PENDING': { return {...state, transactions:[]}; break; }
-    case 'GET_TRANSACTION_FULLFILLED': { return {...state, transactions:action.payload}; break; }
-    default: { return state; break; }
+    case 'GET_REPORT_PENDING': { return {...state, report:[]};}
+    case 'GET_REPORT_FULFILLED': { return {...state, report:action.payload.data}; }
+    case 'GET_DAILY_REPORT_PENDING': { return {...state, report:[]}; }
+    case 'GET_DAILY_REPORT_FULFILLED': { return {...state, report:action.payload.data}; }
+
+    default: { return state; }
   }
 }

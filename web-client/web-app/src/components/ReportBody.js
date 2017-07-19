@@ -1,6 +1,9 @@
 import React from 'react'
+import jsPDF from 'jspdf'
 import { Table,Header,Button, Dropdown,Menu} from 'semantic-ui-react'
 import { connect } from 'react-redux'
+
+import { loadAction } from '../actions/loadAction'
 
 
 const timeOrder = [{ text: 'Day',value: 'day',},
@@ -13,13 +16,14 @@ class ReportBody extends React.Component {
   constructor(){
     super()
     this.state = {
-      transactions:[],
       order:'',
       activeItem: 1,
-      startCell:0,
-      endCell:0,
       limit:10
-      }
+    }
+  }
+
+  componentDidMount(){
+    this.props.loadTransaction('transactions')
   }
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: +name })
@@ -30,54 +34,37 @@ class ReportBody extends React.Component {
 
   onPrint(type) {
     const { transactions } = this.props
-    var jsPDF = require('jspdf')
-    var doc = new jsPDF('p','pt','c6');
-    var enter_space = 50;
-    var margin = 20;
-    var length = 15;
-    let a = 15;
-    var start =0;
-    doc.setFontSize(20);
-    doc.text(margin,30, 'Transactions');
+
+    let doc = new jsPDF('p','pt','c6');
+    let pageHeight = doc.internal.pageSize.height;
+    let length = transactions.length;
+    let y_height = 60;
+    let enter_space = 20;
+    let margin = 20;
+    let current_num =0;
+
 
     doc.setFontSize(15);
+    doc.text(margin,40, 'Transactions');
+    doc.setFontSize(10);
+    doc.text(margin,60,'No          ID              Total');
 
-    doc.text(margin,enter_space,'No     Nama       Total');
-
-    let arr=transactions.filter((data,i)=> (i>=start) ? data : null )
-console.log(arr);
-
-      arr.map((data,i) => {
-          enter_space+=margin;
-
-          if(i<length){
-            if(i<9){
-              return doc.text(margin,enter_space,` ${i+1}.       ${data.id}      ${data.total}`)
-            }
-            else{
-              return doc.text(margin,enter_space,` ${i+1}.     ${data.id}      ${data.total}`)
-            }
-          }
-      })
-      start+=length;
-      doc.addPage()
-      doc.text(margin,enter_space,'No     Nama       Total');
-      arr=transactions.filter((data,i)=> (i>=start) ? data : null )
-      console.log(arr);
-      console.log(start);
-      console.log(length);
-      arr.map((data,i) => {
-          enter_space+=margin;
-
-          if(i<length){
-            if(i<9){
-              return doc.text(margin,enter_space,` ${i+1}.       ${data.id}      ${data.total}`)
-            }
-            else{
-              return doc.text(margin,enter_space,` ${i+1}.     ${data.id}      ${data.total}`)
-            }
-          }
-      })
+    for (let i = 0; i < length; i++) {
+      let total = transactions[current_num].pay-transactions[current_num].refund
+      if(i<9){
+        y_height+=enter_space;
+        doc.text(margin,y_height,` ${current_num+1}.        ${transactions[current_num].name}             ${total}`)
+        current_num++
+      }else{
+        y_height+=enter_space;
+        doc.text(margin,y_height,` ${current_num+1}.      ${transactions[current_num].name}           ${total}`)
+        current_num++
+        if(y_height >= pageHeight){
+          doc.addPage()
+          y_height= 0;
+        }
+      }
+    }
 
     if(type==='show')
     doc.output('dataurlnewwindow')
@@ -107,15 +94,17 @@ console.log(arr);
     let startIndex=((+page)*limit)-(limit)
     let startNo = startIndex
     let arr = transactions.filter((data,i)=>(i>=startIndex) ? data:null)
+    let total = 0
 
     return arr.map((data,i) =>{
       startNo+=1
+      let total=data.pay-data.refund
       if(i<limit){
         return(
           <Table.Row key={i}>
-          <Table.Cell>{startNo}</Table.Cell>
-          <Table.Cell>{data.id}</Table.Cell>
-          <Table.Cell>{data.total}</Table.Cell>
+          <Table.Cell >{startNo}</Table.Cell>
+          <Table.Cell >{data.name}</Table.Cell>
+          <Table.Cell >{total}</Table.Cell>
           </Table.Row>
         )
       }else return null
@@ -124,27 +113,25 @@ console.log(arr);
 
   render(){
 
-    const {limit } = this.state
+    const { limit,activeItem } = this.state
     const { transactions } = this.props
-    var headers = Object.keys(transactions[0])
-    headers.unshift('no')
-
+    let pages = transactions.length/limit
     return (
       <div>
+      <Header as='h3'>Report</Header>
         <div>
-          <Header as='h3'>Report</Header>
           <Dropdown placeholder='Select ordered by' value={this.state.order} selection options={timeOrder}
             onChange={(e,data) => {this.handleChange(e,data)}}
-            style={{marginTop:20,marginBottom:20}}
+            style={{marginTop:10,marginBottom:10}}
           />
-          <Table fixed>
+        </div>
+        <div>
+          <Table fixed celled>
             <Table.Header>
               <Table.Row>
-              {
-                headers.map((header,i) =>
-                  <Table.HeaderCell key={i}>{header}</Table.HeaderCell>
-                )
-              }
+              <Table.HeaderCell textAlign={'center'}>No</Table.HeaderCell>
+              <Table.HeaderCell>Id</Table.HeaderCell>
+              <Table.HeaderCell>Total</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
 
@@ -154,25 +141,34 @@ console.log(arr);
               }
             </Table.Body>
           </Table>
-          <Menu pagination>
-        <Menu.Item name='Prev'  onClick={() => this.handlePrev()} />
-        {this.renderPage(limit)}
-        <Menu.Item name='Next'  onClick={() => this.handleNext()} />
-      </Menu>
         </div>
-        <div style={{marginTop:50}}><Button onClick={() =>{this.onPrint('show')}}>Show Pdf</Button></div>
-        <div style={{marginTop:10}}><Button onClick={() =>{this.onPrint('dl')}}>Download Pdf</Button></div>
+        <div style={{marginTop:10}}>
+          <Menu pagination>
+            {(activeItem===1) ? <Menu.Item name='Prev' disabled/>:<Menu.Item name='Prev' onClick={() => this.handlePrev()} />}
+            {this.renderPage(limit)}
+            {(pages<=activeItem) ? <Menu.Item name='Next' disabled/>:<Menu.Item name='Next'  onClick={() => this.handleNext()} />}
+          </Menu>
+        </div>
+        <div style={{marginTop:20}}>
+          <Button onClick={() =>{this.onPrint('show')}}>Show Pdf</Button>
+          <Button onClick={() =>{this.onPrint('dl')}}>Download Pdf</Button>
+        </div>
       </div>
     )
   }
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
-    transactions: state.reportReducer.transactions
+    transactions: state.transactionReducer.transactions
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return{
+    loadTransaction: (type) => dispatch(loadAction(type))
   }
 }
 
 
-export default connect (mapStateToProps,null)(ReportBody)
+export default connect (mapStateToProps,mapDispatchToProps)(ReportBody)

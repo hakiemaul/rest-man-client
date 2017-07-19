@@ -1,24 +1,14 @@
 const initial_state = {
-  menu : [{
-    name:'ayam bakar',
-    category:'makanan'
-  },{
-    name:'sapi goreng',
-    category:'makanan'
-  },{
-    name:'jus ayam',
-    category:'minuman'
-  },{
-    name:'jus sapi',
-    category:'minuman'
-  },]
+  menu : []
 }
 
 export default (state=initial_state, action) => {
   switch (action.type) {
-    case 'GET_MENU_PENDING': { return {...state, menu:[]}; break; }
-    case 'GET_MENU_FULLFILLED': { return {...state, menu:action.payload}; break; }
-    case 'ADD_MENU': { return {...state, menu:state.menu.concat(action.payload)}; break; }
-    default: { return state; break; }
+    case 'GET_MENU_PENDING': { return {...state, menu:[]}; }
+    case 'GET_MENU_FULFILLED': { return {...state, menu:action.payload.data}; }
+    case 'ADD_MENU': { return {...state, menu:state.menu.concat(action.payload)};}
+    case 'EDIT_MENU': { return {...state, menu:state.menu.map()};}
+    case 'DELETE_MENU': { return {...state, menu:state.menu.filter(data => data.id!==action.payload)};}
+    default: { return state; }
   }
 }

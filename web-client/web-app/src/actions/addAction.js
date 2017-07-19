@@ -1,7 +1,6 @@
+import axios from 'axios'
 
-export const addAction = (data,add_to='tai') => {
-  console.log('add---',data);
-  console.log('add to--------',add_to);
+export const addAction = (data,add_to='') => {
 
   var type=''
   var payload={}
@@ -11,8 +10,11 @@ export const addAction = (data,add_to='tai') => {
   }
 
   else if(add_to==='menu'){
+
     type='ADD_MENU'
     payload=data
+    console.log('action----',data);
+    axios.post('http://ec2-52-77-252-189.ap-southeast-1.compute.amazonaws.com:3000/menu',data)
   }
 
   return {
