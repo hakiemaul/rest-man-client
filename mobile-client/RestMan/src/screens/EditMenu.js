@@ -158,6 +158,7 @@ class MenuSelection extends React.Component {
 
   _addOrder (menu) {
     const newOrder = {
+      id_order: this.props.navigation.state.params.order,
       name: menu.name,
       price: menu.price,
       qty_item: 1,

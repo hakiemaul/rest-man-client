@@ -53,7 +53,6 @@ class Detail extends React.Component {
   constructor () {
     super ()
     this.state = {
-      id: '',
       orders: [],
       total: 0,
       pay: 0,
@@ -64,20 +63,39 @@ class Detail extends React.Component {
   componentDidMount () {
     axios.get(serv + '/order/' + this.props.navigation.state.params.order)
     .then(response => {
-      this.props.editOrder(response.data.Menus)
+      let orders = response.data.Menus.map(order => {
+        return {
+          id_order: response.data.id,
+          id_menu: order.id,
+          qty_item: order.MenuOrder.qty_item,
+          price: order.price,
+          name: order.name,
+          description: order.description
+        }
+      })
+      let total = response.data.total_price
+      if (this.props.edited.length === 0 || this.props.edited[0].id_order !== orders[0].id_order) {
+        this.props.editOrder(orders)
+      } else {
+        total = this.props.edited.reduce((sum, value) => {
+          return sum + (value.price * value.qty_item)
+        }, 0)
+      }
       this.setState({
-        id: response.data.id,
-        orders: response.data.Menus,
-        total: response.data.total_price,
-        change: -response.data.total_price
+        id_employee: response.data.id_employee,
+        total: total
       })
     })
   }
 
+  // componentDidFocus () {
+  //   this.props.edited = this.props.edited
+  // }
+
   _addQty (item, index) {
     let edited = this.props.edited.map((d, i) => {
       if (index === i) {
-        d.MenuOrder.qty_item++
+        d.qty_item++
       }
       return d
     })
@@ -92,12 +110,12 @@ class Detail extends React.Component {
   _remQty (item, index) {
     let changed = this.props.edited.map((d, i) => {
       if (index === i) {
-        d.MenuOrder.qty_item--
+        d.qty_item--
       }
       return d
     })
     let changed2 = this.props.edited.filter((d) => {
-      return d.MenuOrder.qty_item >= 0
+      return d.qty_item >= 0
     })
     // alert(JSON.stringify(changed2))
     let total = this.state.total - this.props.edited[index].price
@@ -105,6 +123,31 @@ class Detail extends React.Component {
     this.setState({
       total: total
     })
+  }
+
+  _doneEditing () {
+    Alert.alert( 'Konfirmasi Perubahan', 'Apakah pesanan sudah sesuai?', [  {text: 'Cancel', onPress: () => {}, style: 'cancel'}, {text: 'OK', onPress: () => {
+      let self = this
+      let edited = this.props.edited.filter((d) => {
+        return d.qty_item > 0
+      })
+      axios.put(serv + '/order/' + this.props.navigation.state.params.order, {
+        no_meja: this.props.navigation.state.params.name,
+        id_employee: this.state.id_employee,
+        total_price: this.state.total,
+        menu_order: edited
+      })
+      .then(response => {
+        self.props.emptyEdit()
+        const goWaiter = NavigationActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({ routeName: 'MainWaiter'})
+          ]
+        })
+        self.props.navigation.dispatch(goWaiter)
+      })
+    }}, ], { cancelable: false } )
   }
 
   render () {
@@ -125,7 +168,7 @@ class Detail extends React.Component {
             {(this.state.total > 0) ? (<Button
               raised
               icon={{name: 'shopping-cart'}}
-              onPress={() => this._doneOrdering()}
+              onPress={() => this._doneEditing()}
               title='KONFIRMASI EDIT'
               backgroundColor='#73a4f4' />) : (<Button
                 raised
@@ -153,14 +196,14 @@ class Detail extends React.Component {
                 <View style={styles.user}>
                   <View>
                     <Text style={styles.name}>{u.name}</Text>
-                    <Text style={styles.price}>{u.name}</Text>
+                    <Text numberOfLines={1} style={styles.price}>{u.description}</Text>
                   </View>
                   <Text style={styles.price}>Rp <FormattedNumber
                     value={u.price}
                     minimumFractionDigits={2} /></Text>
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                  {u.MenuOrder.qty_item > 0 ? (
+                  {u.qty_item > 0 ? (
                     <TouchableHighlight style={{width: 30, height: 26, borderWidth: 1, borderRightWidth: 0}}
                       onPress={() => this._remQty(u, i)}>
                     <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
@@ -180,7 +223,7 @@ class Detail extends React.Component {
                     </View>
                     </TouchableHighlight>)}
                   <View style={{width: 30, height: 26, borderWidth: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                  <Text style={{marginLeft: 10, marginRight: 10}}>{u.MenuOrder.qty_item}</Text>
+                  <Text style={{marginLeft: 10, marginRight: 10}}>{u.qty_item}</Text>
                   </View>
                   <TouchableHighlight style={{width: 30, height: 26, borderWidth: 1, borderLeftWidth: 0}}>
                     <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
@@ -202,7 +245,7 @@ class Detail extends React.Component {
           raised
           icon={{name: 'add'}}
           title='TAMBAH ORDER'
-          onPress={() => this.props.navigation.navigate('EditMenu', { table: this.props.navigation.state.params.name })}
+          onPress={() => this.props.navigation.navigate('EditMenu', { order: this.props.navigation.state.params.order })}
           backgroundColor='#2fad4c' />
       </ParallaxScrollView>
     )
