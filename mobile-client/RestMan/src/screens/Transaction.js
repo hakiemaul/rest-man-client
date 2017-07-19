@@ -61,22 +61,24 @@ class Transaction extends React.Component {
 
   _doPay () {
     if (this.state.change >= 0) {
-      let self = this
-      axios.post(serv + '/transaction', {
-        id_order: this.state.id,
-        pay: this.state.pay,
-        refund: this.state.change
-      })
-      .then(response => {
-        self.props.tableIsDone(self.props.navigation.state.params.name)
-        const goCashier = NavigationActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({ routeName: 'CashierDashboard'})
-          ]
+      Alert.alert( 'Konfirmasi Pembayaran', 'Apakah pembayaran sudah selesai?', [  {text: 'Cancel', onPress: () => {}, style: 'cancel'}, {text: 'OK', onPress: () => {
+        let self = this
+        axios.post(serv + '/transaction', {
+          id_order: this.state.id,
+          pay: this.state.pay,
+          refund: this.state.change
         })
-        self.props.navigation.dispatch(goCashier)
-      })
+        .then(response => {
+          self.props.tableIsDone(self.props.navigation.state.params.name)
+          const goCashier = NavigationActions.reset({
+            index: 0,
+            actions: [
+              NavigationActions.navigate({ routeName: 'MainCashier'})
+            ]
+          })
+          self.props.navigation.dispatch(goCashier)
+        })
+      }}, ] )
     } else {
       alert('Pembayaran belum cukup!')
     }

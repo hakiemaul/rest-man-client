@@ -1,5 +1,5 @@
 import React from 'react'
-import { StackNavigator } from 'react-navigation'
+import { StackNavigator, DrawerNavigator } from 'react-navigation'
 
 import Loading from './screens/Loading'
 import Login from './screens/Login'
@@ -8,6 +8,24 @@ import MenuSelection from './screens/MenuSelection'
 import CashierDashboard from './screens/CashierDashboard'
 import Transaction from './screens/Transaction'
 import Checkout from './screens/Checkout'
+import Logout from './screens/Logout'
+import Detail from './screens/Detail'
+
+const MainCashier = DrawerNavigator({
+  CashierDashboard: { screen: CashierDashboard },
+  Logout: { screen: Logout }
+}, {
+  initialRouteName: 'CashierDashboard',
+  headerMode: 'screen'
+})
+
+const MainWaiter = DrawerNavigator({
+  WaiterDashboard: { screen: WaiterDashboard },
+  Logout: { screen: Logout }
+}, {
+  initialRouteName: 'WaiterDashboard',
+  headerMode: 'screen'
+})
 
 export default App = StackNavigator({
   Loading: { screen: Loading },
@@ -16,5 +34,8 @@ export default App = StackNavigator({
   MenuSelection: { screen: MenuSelection },
   Checkout: { screen: Checkout },
   CashierDashboard: { screen: CashierDashboard },
-  Transaction: { screen: Transaction }
+  Transaction: { screen: Transaction },
+  MainCashier: { screen: MainCashier },
+  MainWaiter: { screen: MainWaiter },
+  Detail: { screen: Detail }
 })

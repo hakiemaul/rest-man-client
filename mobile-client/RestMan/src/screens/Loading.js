@@ -19,11 +19,11 @@ const styles = {
     justifyContent: 'center',
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: '#FC7100',
+    backgroundColor: '#fff',
   },
   text: {
     fontSize: 20,
-    color: '#fff'
+    color: '#020d19'
   }
 }
 
@@ -53,7 +53,7 @@ class Loading extends React.Component {
             const goWaiter = NavigationActions.reset({
               index: 0,
               actions: [
-                NavigationActions.navigate({ routeName: 'WaiterDashboard'})
+                NavigationActions.navigate({ routeName: 'MainWaiter'})
               ]
             })
             setTimeout( () => {
@@ -63,7 +63,7 @@ class Loading extends React.Component {
             const goCashier = NavigationActions.reset({
               index: 0,
               actions: [
-                NavigationActions.navigate({ routeName: 'CashierDashboard'})
+                NavigationActions.navigate({ routeName: 'MainCashier'})
               ]
             })
             setTimeout( () => {

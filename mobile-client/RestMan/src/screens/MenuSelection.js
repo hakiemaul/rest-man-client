@@ -5,7 +5,6 @@ import {
   Text,
   TextInput,
   FlatList,
-  Button,
   Dimensions,
   TouchableOpacity,
   TouchableHighlight,
@@ -16,7 +15,8 @@ import {
 } from 'react-native'
 import {
   List,
-  ListItem
+  ListItem,
+  Button
 } from 'react-native-elements'
 import { connect } from 'react-redux'
 import axios from 'axios'
@@ -29,12 +29,12 @@ const serv = 'http://ec2-52-77-252-189.ap-southeast-1.compute.amazonaws.com:3000
 
 const { height, width } = Dimensions.get('window')
 const cardHeight = 0.1 * height
-const cardWidth = 0.75 * width
+const cardWidth = 0.9 * width
 const styles = {
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#FC7100',
+    backgroundColor: '#fff',
     justifyContent: 'flex-start',
     alignItems: 'flex-start'
   },
@@ -47,15 +47,13 @@ const styles = {
   card: {
     height: 130,
     width: cardWidth,
-    backgroundColor: '#443C35',
-    borderWidth: 0.5,
-    borderRadius: 6,
+    backgroundColor: '#253951',
     padding: 15,
     marginBottom: 20,
     justifyContent: 'space-between'
   },
   text: {
-    color: '#FFF',
+    color: '#020d19',
     fontSize: 20
   }
 }
@@ -94,28 +92,32 @@ class MenuSelection extends React.Component {
 
   _allMenu = ({ item }) => (
     <View style={styles.card}>
-      <TouchableOpacity onPress={() => {}}>
-        <Text style={{...styles.text, fontWeight: 'bold', fontSize: 15}}>{ item.name }</Text>
-        <Text numberOfLines={1} style={{...styles.text, fontStyle: 'italic', fontSize: 12}}>{ item.description }</Text>
-        <Text style={{...styles.text, fontSize: 12}}>Rp <FormattedNumber
+      <TouchableOpacity onPress={() => alert(item.description)}>
+        <Text style={{...styles.text, fontWeight: 'bold', fontSize: 15, color: '#fff'}}>{ item.name }</Text>
+        <Text numberOfLines={1} style={{...styles.text, fontStyle: 'italic', fontSize: 12, color: '#fff'}}>{ item.description }</Text>
+        <Text style={{...styles.text, fontSize: 12, color: '#fff'}}>Rp <FormattedNumber
           value={item.price}
           minimumFractionDigits={2}
           style={{ color: '#fff' }} /></Text>
       </TouchableOpacity>
       { this.props.orders.some((_item) => { return _item.name == item.name}) ? (
         <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
-        <Text style={{...styles.text, fontSize: 12}}>Jumlah pesanan: </Text>
+        <Text style={{...styles.text, fontSize: 12, color: '#fff'}}>Jumlah pesanan: </Text>
         <Button
           onPress={() => this._addOrder(item) }
-          title="Sudah order"
-          color="#73a4f4"
+          title="SUDAH ORDER"
+          backgroundColor="#73a4f4"
+          color="#fff"
+          fontWeight="bold"
           accessibilityLabel="Do your job!"
         />
         </View>
       ) : <Button
         onPress={() => this._addOrder(item) }
-        title="Add to Order"
-        color="green"
+        title="TAMBAHKAN"
+        backgroundColor="green"
+        color="#fff"
+        fontWeight="bold"
         accessibilityLabel="Do your job!"
       />}
     </View>
@@ -245,7 +247,7 @@ class MenuSelection extends React.Component {
             onChangeText={(text) => this._searchReal(text)}
             value={ this.state.searchMenu }
             style={{ width: 300, marginLeft: 20 }}
-            placeholder='Nama menu'
+            placeholder='Cari menu'
           />
           <View style={styles.listContainer}>
             <Text style={{...styles.text, marginLeft: 20, fontSize: 15}}>Hasil pencarian menu</Text>
@@ -253,20 +255,27 @@ class MenuSelection extends React.Component {
               data={this.state.filtered}
               renderItem={this._allMenu}
               keyExtractor={(item, index) => item.name}
-              style={{marginTop: 30, marginLeft: 44}}
+              style={{marginTop: 30, marginLeft: 0.05 * width}}
             />
           </View>
           <View style={{ width: width, flexDirection: 'row', justifyContent: 'space-around', marginBottom: 10, marginTop: 10 }}>
           <Button
             onPress={() => this._clearOrder() }
-            title="Clear Order"
-            color="gray"
+            title="CLEAR ORDER"
+            backgroundColor="gray"
+            color="#fff"
+            fontWeight="bold"
+            icon={{name: 'remove-shopping-cart'}}
             accessibilityLabel="Do your job!"
           />
           <Button
             onPress={() => this._goNext() }
-            title="Lanjut"
-            color="darkblue"
+            iconRight
+            title="LANJUT"
+            backgroundColor="darkblue"
+            color="#fff"
+            fontWeight="bold"
+            icon={{name: 'send'}}
             accessibilityLabel="Do your job!"
           />
           </View>
@@ -279,7 +288,7 @@ class MenuSelection extends React.Component {
             onChangeText={(text) => this._searchReal(text)}
             value={ this.state.searchMenu }
             style={{ width: 300, marginLeft: 20 }}
-            placeholder='Nama menu'
+            placeholder='Cari menu'
           />
           <View style={styles.listContainer}>
             <Text style={{...styles.text, marginLeft: 20, fontSize: 15}}>Daftar Menu</Text>
@@ -287,20 +296,27 @@ class MenuSelection extends React.Component {
               data={this.props.menu.menus}
               renderItem={this._allMenu}
               keyExtractor={(item, index) => item.name}
-              style={{marginTop: 30, marginLeft: 44}}
+              style={{marginTop: 30, marginLeft: 0.05 * width}}
             />
           </View>
           <View style={{ width: width, flexDirection: 'row', justifyContent: 'space-around', marginBottom: 10, marginTop: 10 }}>
           <Button
             onPress={() => this._clearOrder() }
-            title="Clear Order"
-            color="gray"
+            title="CLEAR ORDER"
+            backgroundColor="gray"
+            color="#fff"
+            fontWeight="bold"
+            icon={{name: 'remove-shopping-cart'}}
             accessibilityLabel="Do your job!"
           />
           <Button
             onPress={() => this._goNext() }
-            title="Lanjut"
-            color="darkblue"
+            iconRight
+            title="LANJUT"
+            backgroundColor="darkblue"
+            color="#fff"
+            fontWeight="bold"
+            icon={{name: 'send'}}
             accessibilityLabel="Do your job!"
           />
           </View>

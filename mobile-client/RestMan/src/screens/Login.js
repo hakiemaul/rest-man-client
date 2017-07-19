@@ -23,7 +23,7 @@ const styles = {
     justifyContent: 'space-between',
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: '#FC7100',
+    backgroundColor: '#fff',
   },
   welcome: {
     fontSize: 30,
@@ -31,7 +31,7 @@ const styles = {
     margin: 10,
     marginTop: 60,
     fontWeight: 'bold',
-    color: 'white'
+    color: '#020d19'
   }
 }
 
@@ -112,16 +112,16 @@ class Login extends React.Component {
           <TextInput
             onChangeText={(text) => this.setState({ username: text })}
             value={ this.state.username }
-            style={{ width: 300, color: 'white' }}
-            placeholderTextColor='white'
+            style={{ width: 300, color: '#020d19' }}
+            placeholderTextColor='#020d19'
             placeholder='Employee username'
           />
           <TextInput
             onChangeText={(text) => this.setState({ password: text })}
             value={ this.state.password }
-            style={{ width: 300, color: 'white' }}
+            style={{ width: 300, color: '#020d19' }}
             secureTextEntry={true}
-            placeholderTextColor='white'
+            placeholderTextColor='#020d19'
             placeholder='Password'
           />
         </View>
