@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Image, StyleSheet, AsyncStorage } from 'react-native'
+import { View, Text, Image, StyleSheet, AsyncStorage } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 
 const styles = StyleSheet.create({
@@ -11,10 +11,11 @@ const styles = StyleSheet.create({
 
 class Logout extends React.Component {
   static navigationOptions = {
-    drawerLabel: 'Logout'
+    drawerLabel: 'Logout',
+    header: null,
   }
 
-  _doLogout () {
+  componentDidMount () {
     AsyncStorage.removeItem('token', (err, result) => {
       this.setState({
         token: ''
@@ -29,17 +30,18 @@ class Logout extends React.Component {
             NavigationActions.navigate({ routeName: 'Login'})
           ]
         })
-        this.props.navigation.dispatch(goLogin)
+        setTimeout(() => {
+          this.props.navigation.dispatch(goLogin)
+        },2000)
       })
     })
   }
 
   render() {
     return (
-      <Button
-        onPress={() => this._doLogout()}
-        title="Go back home"
-      />
+      <View style={{flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+        <Text>Logging out...</Text>
+      </View>
     );
   }
 }
