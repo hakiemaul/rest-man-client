@@ -7,32 +7,40 @@ import {
   AsyncStorage,
   FlatList,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  Image
 } from 'react-native'
 import { connect } from 'react-redux'
-import { NavigationActions } from 'react-navigation'
+import { NavigationActions, DrawerNavigator } from 'react-navigation'
 
 const styles = {
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#FC7100',
+    backgroundColor: '#fff',
   },
   listContainer: {
     flex: 1,
     justifyContent: 'space-between',
     flexDirection: 'column',
     alignItems: 'flex-start',
+    width: 300
   },
   text: {
-    color: '#FFF',
+    color: '#020d19',
     fontSize: 20
   }
 }
 
 class CashierDashboard extends React.Component {
   static navigationOptions = {
-    title: 'Halaman Kasir'
+    title: 'Halaman Kasir',
+    headerTitleStyle: {
+      color: '#fff'
+    },
+    headerStyle: {
+      backgroundColor: '#253951'
+    }
   }
 
   constructor () {
@@ -40,6 +48,7 @@ class CashierDashboard extends React.Component {
     this.state = {
       username: '',
       refreshing: false,
+      occupied: []
     }
   }
 
@@ -92,12 +101,14 @@ class CashierDashboard extends React.Component {
   }
 
   _renderItem = ({ item }) => (
+    <Image source={{ uri: 'https://s-media-cache-ak0.pinimg.com/originals/c3/49/cc/c349cc154ad89ec4b9a1fe9071026800.jpg' }} style={{ width: 300, borderRadius: 30, height: 82, marginBottom: 10, opacity: 0.7, backgroundColor: 'transparent' }}>
     <TouchableOpacity
-      style={{ width: 300, borderWidth: 1, borderRadius: 10, padding: 20, marginBottom: 10, backgroundColor: '#443C35' }}
+      style={{ padding: 20, backgroundColor: '#253951' }}
       onPress={() => this.props.navigation.navigate('Transaction', { name: item.name, order: item.order })}>
-      <Text style={styles.text}>Order {item.name}</Text>
-      <Text style={{...styles.text, fontSize: 10 }}>Klik untuk menuju pembayaran</Text>
+      <Text style={{...styles.text, color: '#fff'}}>{item.name}</Text>
+      <Text style={{...styles.text, fontSize: 10, color: '#fff' }}>Klik untuk menuju pembayaran</Text>
     </TouchableOpacity>
+    </Image>
   )
 
   render () {
@@ -106,19 +117,13 @@ class CashierDashboard extends React.Component {
         <Text style={{...styles.text, marginTop: 20, marginBottom: 20}}>Selamat bekerja, {this.state.username}</Text>
         <View style={styles.listContainer}>
           <Text style={styles.text}>Order Aktif</Text>
-          <FlatList
+          {(this.state.occupied.length > 0) ? (<FlatList
             data={this.state.occupied}
             renderItem={this._renderItem}
             keyExtractor={(item, index) => item.name}
             style={{ marginTop: 30, width: 300, marginBottom: 50 }}
-          />
+          />) : (<Text style={{...styles.text, fontSize: 12}}>Tidak ada pesanan</Text>)}
         </View>
-        <Button
-          onPress={() => this._doLogout() }
-          title="Logout"
-          color="#443C35"
-          accessibilityLabel="Do your job!"
-        />
       </ScrollView>
     )
   }

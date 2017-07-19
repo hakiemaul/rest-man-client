@@ -41,9 +41,22 @@ export const addOrder = (orders) => {
   }
 }
 
+export const editOrder = (orders) => {
+  return {
+    type: 'ADD_TO_EDIT',
+    payload: orders
+  }
+}
+
 export const emptyOrder = () => {
   return {
     type: 'EMPTY_ORDER'
+  }
+}
+
+export const emptyEdit = () => {
+  return {
+    type: 'EMPTY_EDIT'
   }
 }
 

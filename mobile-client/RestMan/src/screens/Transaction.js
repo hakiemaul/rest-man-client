@@ -4,7 +4,8 @@ import {
   Text,
   TextInput,
   ScrollView,
-  Alert
+  Alert,
+  ActivityIndicator
 } from 'react-native'
 import axios from 'axios'
 import { Card, ListItem, Button, Icon, FormInput, FormLabel } from 'react-native-elements'
@@ -37,6 +38,17 @@ const styles = {
 }
 
 class Transaction extends React.Component {
+  static navigationOptions = ({navigation}) => ({
+    title: `Detail Transaksi ${navigation.state.params.name}`,
+    headerTitleStyle: {
+      color: '#fff'
+    },
+    headerStyle: {
+      backgroundColor: '#253951'
+    },
+    headerTintColor: '#fff'
+  })
+
   constructor () {
     super ()
     this.state = {
@@ -44,7 +56,8 @@ class Transaction extends React.Component {
       orders: [],
       total: 0,
       pay: 0,
-      change: 0
+      change: 0,
+      isLoading: false
     }
   }
   componentDidMount () {
@@ -61,22 +74,27 @@ class Transaction extends React.Component {
 
   _doPay () {
     if (this.state.change >= 0) {
-      let self = this
-      axios.post(serv + '/transaction', {
-        id_order: this.state.id,
-        pay: this.state.pay,
-        refund: this.state.change
-      })
-      .then(response => {
-        self.props.tableIsDone(self.props.navigation.state.params.name)
-        const goCashier = NavigationActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({ routeName: 'CashierDashboard'})
-          ]
+      Alert.alert( 'Konfirmasi Pembayaran', 'Apakah pembayaran sudah selesai?', [  {text: 'Cancel', onPress: () => {}, style: 'cancel'}, {text: 'OK', onPress: () => {
+        this.setState({
+          isLoading: true
         })
-        self.props.navigation.dispatch(goCashier)
-      })
+        let self = this
+        axios.post(serv + '/transaction', {
+          id_order: this.state.id,
+          pay: this.state.pay,
+          refund: this.state.change
+        })
+        .then(response => {
+          self.props.tableIsDone(self.props.navigation.state.params.name)
+          const goCashier = NavigationActions.reset({
+            index: 0,
+            actions: [
+              NavigationActions.navigate({ routeName: 'MainCashier'})
+            ]
+          })
+          self.props.navigation.dispatch(goCashier)
+        })
+      }}, ] )
     } else {
       alert('Pembayaran belum cukup!')
     }
@@ -84,6 +102,9 @@ class Transaction extends React.Component {
 
   _cancelOrder () {
     Alert.alert( 'Konfirmasi Pembatalan', 'Apakah transaksi dibatalkan?', [  {text: 'Cancel', onPress: () => {}, style: 'cancel'}, {text: 'OK', onPress: () => {
+      this.setState({
+        isLoading: true
+      })
       let self = this
       axios.delete(serv + '/order/' + this.state.id)
       .then(response => {
@@ -91,7 +112,7 @@ class Transaction extends React.Component {
         const goCashier = NavigationActions.reset({
           index: 0,
           actions: [
-            NavigationActions.navigate({ routeName: 'CashierDashboard'})
+            NavigationActions.navigate({ routeName: 'MainCashier'})
           ]
         })
         self.props.navigation.dispatch(goCashier)
@@ -100,12 +121,12 @@ class Transaction extends React.Component {
   }
 
   render () {
-    return (
-      <ScrollView style={styles.container}>
-        <Text style={styles.text}>Detail Transaksi {this.props.navigation.state.params.name}</Text>
-        <Card title="ITEMS" containerStyle={{padding: 20}} >
-        {
-          this.state.orders.map((u, i) => {
+    if (!this.state.isLoading) {
+      return (
+        <ScrollView style={styles.container}>
+          <Text style={styles.text}>Detail Transaksi {this.props.navigation.state.params.name}</Text>
+          <Card title="ITEMS" containerStyle={{padding: 20}} >
+          {(this.state.orders.length > 0) ? (this.state.orders.map((u, i) => {
             return (
               <View key={i} style={{marginBottom: 10}}>
                 <View style={styles.user}>
@@ -119,53 +140,74 @@ class Transaction extends React.Component {
                 </View>
               </View>
             );
-          })
-        }
-        </Card>
-        <Text style={styles.text}>Total harga Rp <FormattedNumber
-          value={this.state.total}
-          minimumFractionDigits={2} /></Text>
-        <FormLabel>Pembayaran</FormLabel>
-        <FormInput
-          onChangeText={(text) => this.setState({ pay: text })}
-          onSubmitEditing={() => {
-            let change = this.state.pay - this.state.total
-            this.setState({
-              change: change
-            })
-          }}
-          value={ this.state.pay.toString() }
-          style={{fontSize: 20, color: '#000' }}
-          placeholderTextColor='#000'
-          placeholder='Jumlah bayar'
-          keyboardType='phone-pad'/>
-        <Text style={styles.text}>Kembali Rp
-          {(this.state.change >= 0) ? (<Text> <FormattedNumber
-            value={this.state.change}
-            minimumFractionDigits={2} /></Text>) : (<Text> <FormattedNumber
-              value={0}
-              minimumFractionDigits={2} /></Text>)}
-        </Text>
-        <View style={{ marginBottom: 50}}>
-          <Button
-          raised
-          icon={{name: 'monetization-on'}}
-          onPress={() => this._doPay()}
-          title='BAYAR'
-          backgroundColor='#2fad4c'
-          />
+          })) : (<ActivityIndicator large />)}
+          </Card>
+          <Text style={styles.text}>Total harga Rp <FormattedNumber
+            value={this.state.total}
+            minimumFractionDigits={2} /></Text>
+          <FormLabel>Pembayaran</FormLabel>
+          <FormInput
+            onChangeText={(text) => this.setState({ pay: text })}
+            onSubmitEditing={() => {
+              let change = this.state.pay - this.state.total
+              this.setState({
+                change: change
+              })
+            }}
+            onEndEditing={() => {
+              let change = this.state.pay - this.state.total
+              this.setState({
+                change: change
+              })
+            }}
+            style={{fontSize: 20, color: '#000' }}
+            placeholderTextColor='#000'
+            placeholder='Jumlah bayar'
+            keyboardType='phone-pad'/>
+          <Text style={styles.text}>Kembali Rp
+            {(this.state.change >= 0) ? (<Text> <FormattedNumber
+              value={this.state.change}
+              minimumFractionDigits={2} /></Text>) : (<Text> <FormattedNumber
+                value={0}
+                minimumFractionDigits={2} /></Text>)}
+          </Text>
+          <View style={{ marginBottom: 50}}>
+            <Button
+            raised
+            icon={{name: 'monetization-on'}}
+            onPress={() => this._doPay()}
+            title='BAYAR'
+            backgroundColor='#2fad4c'
+            />
+          </View>
+          <View style={{ marginBottom: 50}}>
+            <Button
+            raised
+            icon={{name: 'delete'}}
+            onPress={() => this._cancelOrder()}
+            title='BATAL PESAN'
+            backgroundColor='red'
+            />
+          </View>
+        </ScrollView>
+      )
+    } else {
+      return (
+        <View style={{
+          flex: 1,
+          justifyContent: 'center',
+          flexDirection: 'column',
+          alignItems: 'center',
+          backgroundColor: '#fff',
+        }}>
+          <ActivityIndicator size='large' />
+          <Text style={{
+            fontSize: 20,
+            color: '#020d19'
+          }}>Processing the transaction</Text>
         </View>
-        <View style={{ marginBottom: 50}}>
-          <Button
-          raised
-          icon={{name: 'delete'}}
-          onPress={() => this._cancelOrder()}
-          title='BATAL PESAN'
-          backgroundColor='red'
-          />
-        </View>
-      </ScrollView>
-    )
+      )
+    }
   }
 }
 

@@ -9,7 +9,8 @@ import {
   Image,
   AsyncStorage,
   Button,
-  ScrollView
+  ScrollView,
+  ActivityIndicator
 } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
@@ -18,7 +19,7 @@ const styles = {
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#FC7100'
+    backgroundColor: '#fff'
   },
   image: {
     height:64,
@@ -36,40 +37,49 @@ const styles = {
     marginBottom: 50
   },
   text: {
-    color: '#FFF',
+    color: '#020d19',
     fontSize: 20
   }
 }
 
 class WaiterDashboard extends React.Component {
   static navigationOptions = {
-    title: 'Halaman Waiter'
+    title: 'Halaman Waiter',
+    headerTitleStyle: {
+      color: '#fff'
+    },
+    headerStyle: {
+      backgroundColor: '#253951'
+    }
   }
 
   constructor () {
     super ()
     this.state = {
-      username: '',
-      occupied: []
+      username: ''
     }
   }
 
   _renderItem = ({ item }) => (
+    <Image source={{ uri: 'https://s-media-cache-ak0.pinimg.com/originals/c3/49/cc/c349cc154ad89ec4b9a1fe9071026800.jpg' }} style={{ width: 300, borderRadius: 30, height: 82, marginBottom: 10, opacity: 0.7, backgroundColor: 'transparent' }}>
     <TouchableOpacity
-      style={{ width: 300, borderWidth: 1, borderRadius: 10, padding: 20, marginBottom: 10, backgroundColor: '#443C35' }}
-      onPress={() => alert('Ini harusnya ke detail' + item.name)}>
-      <Text style={styles.text}>{item.name}</Text>
-      <Text style={{...styles.text, fontSize: 10 }}>Klik untuk lihat detail dan edit</Text>
+      style={{ padding: 20, backgroundColor: '#253951' }}
+      onPress={() => this.props.navigation.navigate('Detail', { name: item.name, order: item.order })}>
+      <Text style={{...styles.text, color: '#fff'}}>{item.name}</Text>
+      <Text style={{...styles.text, fontSize: 10, color: '#fff' }}>Klik untuk lihat detail</Text>
     </TouchableOpacity>
+    </Image>
   )
 
   _renderFree = ({ item }) => (
+    <Image source={{ uri: 'http://www.table50roanoke.com/wp-content/themes/fresh-editorial/images/slideshow/Table-50_offers_finest_wines.jpg' }} style={{ width: 300, borderRadius: 30, height: 82, marginBottom: 10, opacity: 0.7, backgroundColor: 'transparent' }}>
     <TouchableOpacity
-      style={{ width: 300, borderWidth: 1, borderRadius: 10, padding: 20, marginBottom: 10, backgroundColor: '#443C35' }}
+      style={{ padding: 20, backgroundColor: '#253951' }}
       onPress={() => this._addOrder(item.name)}>
-      <Text style={styles.text}>{item.name}</Text>
-      <Text style={{...styles.text, fontSize: 10 }}>Klik untuk mulai pesanan</Text>
+      <Text style={{...styles.text, color: '#fff', opacity: 1}}>{item.name}</Text>
+      <Text style={{...styles.text, fontSize: 10, color: '#fff', opacity: 1 }}>Klik untuk mulai pesanan</Text>
     </TouchableOpacity>
+    </Image>
   )
 
   componentWillMount () {
@@ -133,30 +143,24 @@ class WaiterDashboard extends React.Component {
     return (
       <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'space-around', alignItems: 'center'}}>
         <Text style={{...styles.text, marginTop: 20, marginBottom: 20}}>Selamat bekerja, {this.state.username}</Text>
-        <View style={{...styles.listContainer, marginBottom: 10}}>
+        <View style={{...styles.listContainer, marginBottom: 50, width: 300 }}>
           <Text style={styles.text}>Belum Order</Text>
-          <FlatList
+          {(this.state.free) ? ((this.state.free.length > 0) ? (<FlatList
             data={this.state.free}
             renderItem={this._renderFree}
             keyExtractor={(item, index) => item.name}
-            style={{marginBottom: 30, marginTop: 30}}
-          />
+            style={{ marginTop: 30}}
+          />) : (<Text style={{...styles.text, fontSize: 12}}>Semua meja telah memesan</Text>)) : (<ActivityIndicator size='large' />)}
         </View>
-        <View style={styles.listContainer}>
+        <View style={{...styles.listContainer, marginBottom: 50, width: 300}}>
           <Text style={styles.text}>Order Aktif</Text>
-          <FlatList
+          {(this.state.occupied) ? ((this.state.occupied.length > 0) ? (<FlatList
             data={this.state.occupied}
             renderItem={this._renderItem}
             keyExtractor={(item, index) => item.name}
-            style={{marginBottom: 30, marginTop: 30}}
-          />
+            style={{ marginTop: 30}}
+          />) : ((<Text style={{...styles.text, fontSize: 12}}>Tidak ada pesanan</Text>))) : (<ActivityIndicator size='large' />)}
         </View>
-        <Button
-          onPress={() => this._doLogout() }
-          title="Logout"
-          color="red"
-          accessibilityLabel="Do your job!"
-        />
       </ScrollView>
     )
   }
