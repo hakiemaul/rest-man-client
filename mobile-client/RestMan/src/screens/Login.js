@@ -2,14 +2,16 @@ import React from 'react'
 import {
   StyleSheet,
   View,
+  ScrollView,
   Text,
   TextInput,
-  Button,
   AsyncStorage
 } from 'react-native'
 import {
   FormLabel,
-  FormInput
+  FormInput,
+  Card,
+  Button
 } from 'react-native-elements'
 import { connect } from 'react-redux'
 import axios from 'axios'
@@ -20,9 +22,7 @@ import { hasLoggedIn } from '../actions'
 const styles = {
   container: {
     flex: 1,
-    justifyContent: 'space-between',
     flexDirection: 'column',
-    alignItems: 'center',
     backgroundColor: '#fff',
   },
   welcome: {
@@ -39,7 +39,13 @@ const serv = 'http://ec2-52-77-252-189.ap-southeast-1.compute.amazonaws.com:3000
 
 class Login extends React.Component {
   static navigationOptions = {
-    title: 'Login Page'
+    title: 'RESTMan',
+    headerTitleStyle: {
+      color: '#fff'
+    },
+    headerStyle: {
+      backgroundColor: '#253951'
+    }
   }
 
   constructor () {
@@ -106,35 +112,22 @@ class Login extends React.Component {
 
   render () {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to RESTMan Companion App!</Text>
-        <View>
-          <TextInput
-            onChangeText={(text) => this.setState({ username: text })}
-            value={ this.state.username }
-            style={{ width: 300, color: '#020d19' }}
-            placeholderTextColor='#020d19'
-            placeholder='Employee username'
-          />
-          <TextInput
-            onChangeText={(text) => this.setState({ password: text })}
-            value={ this.state.password }
-            style={{ width: 300, color: '#020d19' }}
-            secureTextEntry={true}
-            placeholderTextColor='#020d19'
-            placeholder='Password'
-          />
-        </View>
-        <View style={{ marginBottom: 50}}>
-          <Button
-            onPress={() => this._doLogin() }
-            title="Login"
-            color="#443C35"
-            accessibilityLabel="Do your job!"
-            style={{width: 200}}
-          />
-        </View>
-      </View>
+      <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'flex-start',}}>
+        <Card title="LOGIN">
+          <View>
+            <FormLabel>Username</FormLabel>
+            <FormInput onChangeText={(text) => this.setState({ username: text })}/>
+            <FormLabel>Password</FormLabel>
+            <FormInput onChangeText={(text) => this.setState({ password: text })} secureTextEntry={true}/>
+            <Button
+              onPress={() => this._doLogin() }
+              raised
+              backgroundColor="#2fad4c"
+              icon={{name: 'cached'}}
+              title='LOGIN' />
+          </View>
+        </Card>
+      </ScrollView>
     )
   }
 }
