@@ -154,7 +154,12 @@ class Transaction extends React.Component {
                 change: change
               })
             }}
-            value={ this.state.pay.toString() }
+            onEndEditing={() => {
+              let change = this.state.pay - this.state.total
+              this.setState({
+                change: change
+              })
+            }}
             style={{fontSize: 20, color: '#000' }}
             placeholderTextColor='#000'
             placeholder='Jumlah bayar'

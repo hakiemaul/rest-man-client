@@ -150,6 +150,17 @@ class Detail extends React.Component {
     }}, ], { cancelable: false } )
   }
 
+  _cancelEdit () {
+    this.props.emptyEdit()
+    const goWaiter = NavigationActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'MainWaiter'})
+      ]
+    })
+    this.props.navigation.dispatch(goWaiter)
+  }
+
   render () {
     return (
       <ParallaxScrollView
@@ -244,8 +255,17 @@ class Detail extends React.Component {
           raised
           icon={{name: 'add'}}
           title='TAMBAH ORDER'
-          onPress={() => this.props.navigation.navigate('EditMenu', { order: this.props.navigation.state.params.order })}
+          onPress={() => this.props.navigation.navigate('EditMenu', { order: this.props.navigation.state.params.order, table: this.props.navigation.state.params.name })}
           backgroundColor='#2fad4c' />
+        <View style={{ marginTop: 50, marginBottom: 50}}>
+          <Button
+          raised
+          icon={{name: 'delete'}}
+          onPress={() => this._cancelEdit()}
+          title='BATAL UBAH'
+          backgroundColor='red'
+          />
+        </View>
       </ParallaxScrollView>
     )
   }

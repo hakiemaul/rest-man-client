@@ -45,7 +45,7 @@ const styles = {
     alignItems: 'flex-start',
   },
   card: {
-    height: 130,
+    height: 150,
     width: cardWidth,
     backgroundColor: '#253951',
     padding: 15,
@@ -108,8 +108,6 @@ class MenuSelection extends React.Component {
           style={{ color: '#fff' }} /></Text>
       </TouchableOpacity>
       { this.props.orders.some((_item) => { return _item.name == item.name}) ? (
-        <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
-        <Text style={{...styles.text, fontSize: 12, color: '#fff'}}>Jumlah pesanan: </Text>
         <Button
           onPress={() => this._addOrder(item) }
           title="SUDAH ORDER"
@@ -118,7 +116,6 @@ class MenuSelection extends React.Component {
           fontWeight="bold"
           accessibilityLabel="Do your job!"
         />
-        </View>
       ) : <Button
         onPress={() => this._addOrder(item) }
         title="TAMBAHKAN"
@@ -190,7 +187,13 @@ class MenuSelection extends React.Component {
   }
 
   _goNext () {
-    this.props.navigation.goBack()
+    const goEdit = NavigationActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Detail', params: { name: this.props.navigation.state.params.table, order: this.props.navigation.state.params.order } })
+      ]
+    })
+    this.props.navigation.dispatch(goEdit)
   }
 
   componentDidMount () {
