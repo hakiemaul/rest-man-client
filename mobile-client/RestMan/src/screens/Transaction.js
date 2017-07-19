@@ -104,7 +104,7 @@ class Transaction extends React.Component {
         const goCashier = NavigationActions.reset({
           index: 0,
           actions: [
-            NavigationActions.navigate({ routeName: 'CashierDashboard'})
+            NavigationActions.navigate({ routeName: 'MainCashier'})
           ]
         })
         self.props.navigation.dispatch(goCashier)

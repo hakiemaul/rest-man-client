@@ -5,7 +5,8 @@ import {
   Text,
   TextInput,
   Button,
-  AsyncStorage
+  AsyncStorage,
+  ActivityIndicator
 } from 'react-native'
 import { connect } from 'react-redux'
 import axios from 'axios'
@@ -78,6 +79,7 @@ class Loading extends React.Component {
   render () {
     return (
       <View style={styles.container}>
+        <ActivityIndicator size='large' />
         <Text style={styles.text}>Take a rest</Text>
         <Text style={styles.text}>We do the rest</Text>
       </View>

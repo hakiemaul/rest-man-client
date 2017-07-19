@@ -10,6 +10,7 @@ import Transaction from './screens/Transaction'
 import Checkout from './screens/Checkout'
 import Logout from './screens/Logout'
 import Detail from './screens/Detail'
+import EditMenu from './screens/EditMenu'
 
 const MainCashier = DrawerNavigator({
   CashierDashboard: { screen: CashierDashboard },
@@ -37,5 +38,6 @@ export default App = StackNavigator({
   Transaction: { screen: Transaction },
   MainCashier: { screen: MainCashier },
   MainWaiter: { screen: MainWaiter },
-  Detail: { screen: Detail }
+  Detail: { screen: Detail },
+  EditMenu: { screen: EditMenu }
 })

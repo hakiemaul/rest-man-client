@@ -79,7 +79,6 @@ class Checkout extends React.Component {
       let edited = this.props.orders.filter((d) => {
         return d.qty_item > 0
       })
-      // alert(this.state.table || this.state.free[0].name)
       axios.post(serv + '/order', {
         no_meja: this.props.navigation.state.params.table,
         id_employee: this.state.id,

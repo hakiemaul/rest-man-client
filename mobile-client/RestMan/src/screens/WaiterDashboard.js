@@ -9,7 +9,8 @@ import {
   Image,
   AsyncStorage,
   Button,
-  ScrollView
+  ScrollView,
+  ActivityIndicator
 } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
@@ -143,23 +144,23 @@ class WaiterDashboard extends React.Component {
     return (
       <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'space-around', alignItems: 'center'}}>
         <Text style={{...styles.text, marginTop: 20, marginBottom: 20}}>Selamat bekerja, {this.state.username}</Text>
-        <View style={{...styles.listContainer, marginBottom: 10}}>
+        <View style={{...styles.listContainer, marginBottom: 10, width: 300 }}>
           <Text style={styles.text}>Belum Order</Text>
-          <FlatList
+          {(this.state.free) ? (<FlatList
             data={this.state.free}
             renderItem={this._renderFree}
             keyExtractor={(item, index) => item.name}
             style={{marginBottom: 30, marginTop: 30}}
-          />
+          />) : (<ActivityIndicator size='large' />)}
         </View>
-        <View style={styles.listContainer}>
+        <View style={{...styles.listContainer, marginBottom: 50, width: 300}}>
           <Text style={styles.text}>Order Aktif</Text>
-          <FlatList
+          {(this.state.occupied) ? ((this.state.occupied.length > 0) ? (<FlatList
             data={this.state.occupied}
             renderItem={this._renderItem}
             keyExtractor={(item, index) => item.name}
-            style={{marginBottom: 30, marginTop: 30}}
-          />
+            style={{ marginTop: 30}}
+          />) : ((<Text style={{...styles.text, fontSize: 12}}>Tidak ada pesanan</Text>))) : (<ActivityIndicator size='large' />)}
         </View>
       </ScrollView>
     )

@@ -202,7 +202,7 @@ class Detail extends React.Component {
           raised
           icon={{name: 'add'}}
           title='TAMBAH ORDER'
-          onPress={() => this.props.navigation.goBack()}
+          onPress={() => this.props.navigation.navigate('EditMenu', { table: this.props.navigation.state.params.name })}
           backgroundColor='#2fad4c' />
       </ParallaxScrollView>
     )
