@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { Segment,List,Image,Header,Container,Grid,Dropdown,Button,Modal,Icon,Item,Loader,Dimmer } from 'semantic-ui-react'
+import { Segment,List,Header,Container,Grid,Dropdown,Button,Modal,Icon,Item,Loader,Dimmer } from 'semantic-ui-react'
 import InfiniteCalendar from 'react-infinite-calendar';
 import 'react-infinite-calendar/styles.css';
 import axios from 'axios';
@@ -9,7 +9,6 @@ import { loadAction } from '../actions/loadAction'
 import Dtree from './Dtree'
 
 const today = new Date();
-const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
 const host = 'http://ec2-52-77-252-189.ap-southeast-1.compute.amazonaws.com:3000'
 
 const dateOptions = [
@@ -40,12 +39,12 @@ class Dasboard extends React.Component {
     .then(response => {
 
       const {sum,sugestionMenu} = response.data
-      console.log(response.data);
+
       if(sugestionMenu){
         const FilteredMenu=sugestionMenu.filter(d =>(sum[0].name.toLowerCase()!==d.label.toLowerCase()) )
           this.setState({sum:response.data.sum,finalResult:response.data.finalResult,sugestionMenu:FilteredMenu,totalTrx:response.data.totalTrx,is_loading:false})
       }else {
-        this.setState({is_loading:false})
+        this.setState({sum:[],finalResult:[],sugestionMenu:[],is_loading:false})
       }})
     }else {
       var currentDate = new Date().toDateString()
@@ -79,7 +78,7 @@ class Dasboard extends React.Component {
           height={200}
           disabledDays={[0,2,3,4,5,6]}
           onSelect={(today)=>this.handleSelected(today)}
-          displayOptions={{showOverlay:true},{showHeader:false}}
+          displayOptions={{showOverlay:true,showHeader:false}}
           />)
     }else{return (<InfiniteCalendar
           width={300}
@@ -87,22 +86,21 @@ class Dasboard extends React.Component {
           display={'days'}
           selected={today}
           onSelect={(today)=>this.handleSelected(today)}
-          displayOptions={{showOverlay:true},{showHeader:false}}
+          displayOptions={{showOverlay:true,showHeader:false}}
           />)
     }
   }
 
   renderList(sum){
-      return(sum.map((data,i) =>{
-      if(i<3){
-       return (<List.Item key={data.id}>
-         <List.Content>
-           <List.Header>{data.name}</List.Header>
-           Total: {data.jumlah_qty}
-         </List.Content>
-       </List.Item>)
-     }
-   }))
+      const filteredData = sum.filter((d,i) =>(i<3))
+      console.log('data',filteredData);
+      return filteredData.map(data =>
+        (<List.Item key={data.id}>
+           <List.Content>
+             <List.Header>{data.name}</List.Header>
+             Total: {data.jumlah_qty}
+           </List.Content>
+         </List.Item>))
   }
 
   renderSugestion = () =>{

@@ -22,7 +22,6 @@ class MenuEdit extends React.Component {
 
 
   handleSubmit(e){
-    const { uploadedFile } = this.state
     e.preventDefault()
     var add_to = 'menu'
     this.props.editMenu(this.state,add_to)

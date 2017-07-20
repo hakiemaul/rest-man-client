@@ -13,8 +13,8 @@ export const deleteAction = (id,add_to='') => {
   else if(add_to==='menu'){
     type='DELETE_MENU'
     payload=id
-    axios.delete(`http://ec2-52-77-252-189.ap-southeast-1.compute.amazonaws.com:3000/menu/${id}`).
-    then(response => console.log('delete--------',response.data))
+    axios.delete(`http://ec2-52-77-252-189.ap-southeast-1.compute.amazonaws.com:3000/menu/${id}`)
+    .then(response => console.log('delete--------',response.data))
   }
 
   return {
