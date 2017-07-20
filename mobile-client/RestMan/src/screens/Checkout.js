@@ -154,7 +154,7 @@ class Checkout extends React.Component {
             </View>
           )}
           stickyHeaderHeight={40}>
-          <Card title="ITEMS" containerStyle={{padding: 20}} >
+          <Card title="PESANAN" containerStyle={{padding: 20}} >
           {
             this.props.orders.map((u, i) => {
               return (
@@ -210,7 +210,7 @@ class Checkout extends React.Component {
           <Button
             raised
             icon={{name: 'add'}}
-            title='TAMBAH ORDER'
+            title='TAMBAH PESANAN'
             onPress={() => this.props.navigation.goBack()}
             backgroundColor='#2fad4c' />
         </ParallaxScrollView>

@@ -126,7 +126,7 @@ class Transaction extends React.Component {
       return (
         <ScrollView style={styles.container}>
           <Text style={styles.text}>Detail Transaksi {this.props.navigation.state.params.name}</Text>
-          <Card title="ITEMS" containerStyle={{padding: 20}} >
+          <Card title="PESANAN" containerStyle={{padding: 20}} >
           {(this.state.orders.length > 0) ? (this.state.orders.map((u, i) => {
             return (
               <View key={i} style={{marginBottom: 10}}>

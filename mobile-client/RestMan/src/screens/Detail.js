@@ -199,7 +199,7 @@ class Detail extends React.Component {
         )}
         stickyHeaderHeight={40}>
         <Text style={styles.text}>Edit Order {this.props.navigation.state.params.name}</Text>
-        <Card title="ITEMS" containerStyle={{padding: 20}} >
+        <Card title="PESANAN" containerStyle={{padding: 20}} >
         {
           this.props.edited.map((u, i) => {
             return (
@@ -254,7 +254,7 @@ class Detail extends React.Component {
         <Button
           raised
           icon={{name: 'add'}}
-          title='TAMBAH ORDER'
+          title='TAMBAH PESANAN'
           onPress={() => this.props.navigation.navigate('EditMenu', { order: this.props.navigation.state.params.order, table: this.props.navigation.state.params.name })}
           backgroundColor='#2fad4c' />
         <View style={{ marginTop: 50, marginBottom: 50}}>

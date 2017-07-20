@@ -66,7 +66,7 @@ class WaiterDashboard extends React.Component {
       style={{ padding: 20, backgroundColor: '#253951' }}
       onPress={() => this.props.navigation.navigate('Detail', { name: item.name, order: item.order })}>
       <Text style={{...styles.text, color: '#fff'}}>{item.name}</Text>
-      <Text style={{...styles.text, fontSize: 10, color: '#fff' }}>Klik untuk lihat detail</Text>
+      <Text style={{...styles.text, fontSize: 10, color: '#fff' }}>Klik untuk lihat detail dan edit</Text>
     </TouchableOpacity>
     </Image>
   )
@@ -144,7 +144,7 @@ class WaiterDashboard extends React.Component {
       <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'space-around', alignItems: 'center'}}>
         <Text style={{...styles.text, marginTop: 20, marginBottom: 20}}>Selamat bekerja, {this.state.username}</Text>
         <View style={{...styles.listContainer, marginBottom: 50, width: 300 }}>
-          <Text style={styles.text}>Belum Order</Text>
+          <Text style={styles.text}>Belum Pesan</Text>
           {(this.state.free) ? ((this.state.free.length > 0) ? (<FlatList
             data={this.state.free}
             renderItem={this._renderFree}
@@ -153,7 +153,7 @@ class WaiterDashboard extends React.Component {
           />) : (<Text style={{...styles.text, fontSize: 12}}>Semua meja telah memesan</Text>)) : (<ActivityIndicator size='large' />)}
         </View>
         <View style={{...styles.listContainer, marginBottom: 50, width: 300}}>
-          <Text style={styles.text}>Order Aktif</Text>
+          <Text style={styles.text}>Sudah Pesan</Text>
           {(this.state.occupied) ? ((this.state.occupied.length > 0) ? (<FlatList
             data={this.state.occupied}
             renderItem={this._renderItem}
