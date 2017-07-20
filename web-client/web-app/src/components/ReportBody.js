@@ -1,14 +1,9 @@
 import React from 'react'
 import jsPDF from 'jspdf'
-import { Table,Header,Button, Dropdown,Menu} from 'semantic-ui-react'
+import { Table,Header,Button,Menu} from 'semantic-ui-react'
 import { connect } from 'react-redux'
 
 import { loadAction } from '../actions/loadAction'
-
-
-const timeOrder = [{ text: 'Day',value: 'day',},
-                   { text: 'Week', value: 'week'},
-                   { text: 'Month', value: 'month' }]
 
 
 class ReportBody extends React.Component {
@@ -122,12 +117,6 @@ class ReportBody extends React.Component {
     return (
       <div>
       <Header as='h3'>Transactions</Header>
-        <div>
-          <Dropdown placeholder='Select ordered by' value={this.state.order} selection options={timeOrder}
-            onChange={(e,data) => {this.handleChange(e,data)}}
-            style={{marginTop:10,marginBottom:10}}
-          />
-        </div>
         <div>
           <Table fixed celled>
             <Table.Header>

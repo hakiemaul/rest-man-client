@@ -1,6 +1,5 @@
 import React from 'react'
 
-import Login from './Login'
 import DashBoard from './DashBoard'
 
 import MenuBody from './MenuBody'
@@ -24,7 +23,6 @@ export default () => {
       <div style={{display:'flex'},{width:'100%'}}>
         <Switch>
           <Route exact path='/' component = { DashBoard }/>
-          <Route exact path='/login' component ={ Login }/>
           <Route exact path='/menu' component ={ MenuBody }/>
           <Route path='/menu/add' component ={ MenuAdd }/>
           <Route path='/menu/edit/:id' component ={ MenuEdit }/>

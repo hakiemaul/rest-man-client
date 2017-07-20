@@ -1,8 +1,7 @@
 import React from 'react'
-import { Button, Form,Breadcrumb,Image,Dropdown } from 'semantic-ui-react'
+import { Button, Form,Breadcrumb,Dropdown } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import Dropzone from 'react-dropzone'
 
 import { loadAction } from '../actions/loadAction'
 import { editAction } from '../actions/editAction'

@@ -1,7 +1,6 @@
 import React from 'react'
-import { Button, Form,Breadcrumb,Image,Dropdown } from 'semantic-ui-react'
+import { Button, Form,Dropdown,Image } from 'semantic-ui-react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
 import firebase from 'firebase';
 import FileUploader from 'react-firebase-file-uploader'
 
@@ -51,7 +50,6 @@ require('dotenv').config()
 
      this.props.addMenu(data,add_to)
      this.props.history.push('/menu');
-     console.log('data----',this.state);
    }
 
    handleChange(e,type){
@@ -71,13 +69,11 @@ require('dotenv').config()
    handleProgress = (progress) => this.setState({progress});
    handleUploadError = (error) => {
      this.setState({isUploading: false});
-     console.error(error);
    }
 
    handleUploadSuccess = (filename) => {
      this.setState({avatar: filename, progress: 100, isUploading: false});
      firebase.storage().ref('images').child(filename).getDownloadURL().then(url => this.setState({avatarURL: url}));
-     console.log('avatar---',this.state.avatar);
    };
 
    render() {
@@ -116,7 +112,7 @@ require('dotenv').config()
            <p>Progress: {this.state.progress}</p>
          }
          {this.state.avatarURL &&
-           <img src={this.state.avatarURL} />
+           <Image src={this.state.avatarURL} />
          }
          </Form.Field>
              <Button type='submit'>Add</Button>

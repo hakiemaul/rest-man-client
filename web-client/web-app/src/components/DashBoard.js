@@ -22,7 +22,7 @@ class Dasboard extends React.Component {
 
   constructor(){
     super()
-    this.state={sum:[],today:'',sugestionMenu:[],is_weekly:false,is_loading:true}
+    this.state={sum:[],today:'',sugestionMenu:[],finalResult:[],is_weekly:false,is_loading:true}
   }
 
   handleSelected(date){
@@ -34,41 +34,41 @@ class Dasboard extends React.Component {
     this.setState({is_loading:true})
 
     if(this.state.is_weekly){
-      console.log('masuk coy');
-
     axios.post(`${host}/report/weekly`,{
       date:time
     })
-    .then(response => this.setState({sum:response.data.sum,sugestionMenu:response.data.sugestionMenu,totalTrx:response.data.totalTrx,is_loading:false}))
+    .then(response => {
+
+      const {sum,sugestionMenu} = response.data
+      console.log(response.data);
+      if(sugestionMenu){
+        const FilteredMenu=sugestionMenu.filter(d =>(sum[0].name.toLowerCase()!==d.label.toLowerCase()) )
+          this.setState({sum:response.data.sum,finalResult:response.data.finalResult,sugestionMenu:FilteredMenu,totalTrx:response.data.totalTrx,is_loading:false})
+      }else {
+        this.setState({is_loading:false})
+      }})
     }else {
       var currentDate = new Date().toDateString()
-      console.log(date.toDateString(),currentDate)
       if(date.toDateString()===currentDate){
-        console.log('masuk asini');
         axios.get(`${host}/report/current`)
-        .then(response => this.setState({sum:response.data.sum,totalTrx:response.data.totalTrx,is_loading:false}))
+        .then(response => this.setState({sum:response.data.sum,finalResult:response.data.finalResult,totalTrx:response.data.totalTrx,is_loading:false}))
       }
       else {
         axios.post(`${host}/report/daily`,{
           date:time
         })
-        .then(response => this.setState({sum:response.data.sum,totalTrx:response.data.totalTrx,is_loading:false}))
+        .then(response => this.setState({sum:response.data.sum,finalResult:response.data.finalResult,totalTrx:response.data.totalTrx,is_loading:false}))
       }
     }
-    console.log(this.state.sum);
-    console.log(this.state.is_weekly);
   }
 
   componentDidMount(){
     axios.get(`${host}/report/current`)
-    .then(respone => this.setState({sum:respone.data.sum,totalTrx:respone.data.totalTrx,is_loading:false}))
+    .then(respone => this.setState({sum:respone.data.sum,finalResult:respone.data.finalResult,totalTrx:respone.data.totalTrx,is_loading:false}))
   }
 
   handleChange(e,data){
-
     this.setState({is_weekly:data.value})
-
-    console.log(data.value);
   }
 
   renderCalender(){
@@ -128,14 +128,14 @@ class Dasboard extends React.Component {
            <div style={{display:'flex',flexDirection:'row',flexWrap:'wrap',justifyContent:'space-around'}}>
            <Item.Group style={{width:'100%'}}>
            {this.state.sugestionMenu.map((data,i) =>(
-             <Item style={{width:'30%'}}>
-               <Item.Image size='tiny' src={data.image} />
+             <Item style={{width:'100%'}}>
+               <Item.Image size='large' src={data.image} />
 
                <Item.Content>
                  <Item.Header as='Judul'>{data.label}</Item.Header>
                  <Item.Meta>Recipe</Item.Meta>
                  <Item.Description>
-                  <List bulleted>
+                  <List bulleted divided verticalAlign='middle'>
                      {data.ingredient.map(d => <List.Item>{d}</List.Item>)}
                   </List>
                  </Item.Description>
@@ -155,10 +155,8 @@ class Dasboard extends React.Component {
    )
  }
 
-
   render(){
-    const { sum,is_weekly,is_loading,totalTrx } = this.state
-    console.log(this.state);
+    const { sum,is_weekly,is_loading,totalTrx,finalResult } = this.state
     if(sum){
     return(
       <div>
@@ -185,30 +183,33 @@ class Dasboard extends React.Component {
                 </div>
               }
             </Segment>
-              {(is_weekly&&sum.length>0)?
+              {(is_weekly)?
               this.ModalSuggestionMenu():null}
             </div>):<div>
               <Segment raised style={{width:330}}>
             <div>
             <Header as='h3'>Top Three</Header>
-            <Dimmer active inverted>
-                              <Loader>Loading</Loader>
-                            </Dimmer>
+              <Dimmer active inverted>
+                <Loader>Loading</Loader>
+              </Dimmer>
             </div>
             </Segment>
-
             </div>}
+
             </Grid.Column>
             {(!is_loading)?
               (<Grid.Column>
                 {(sum.length>0) ?
                   <Segment>
+
                    <Header size='huge'>Total: Rp. {totalTrx.total.toLocaleString(['ban', 'id'])}</Header>
+                   <Header size='large'>{finalResult.length} Transaksi</Header>
+
                     <Dtree sum={sum} />
                   </Segment> :
 
                   <Segment style={{display:'flex',justifyContent:'center'}}>
-                  <Header size='huge'>EMPTY DATA</Header>
+                  <Header size='huge'>Empty Data</Header>
                   </Segment>
                 }
               </Grid.Column>):<Grid.Column>
