@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table,Button,Icon,Menu,Breadcrumb } from 'semantic-ui-react'
+import { Table,Button,Menu,Breadcrumb,Loader } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { addAction } from '../actions/addAction'
 import { deleteAction } from '../actions/deleteAction'
@@ -80,7 +80,7 @@ class MenuBody extends React.Component {
     const { menu } = this.props
 
 
-    if(menu){
+    if(menu.length>0){
     let pages = menu.length/limit;
     return (
       <div>
@@ -121,7 +121,14 @@ class MenuBody extends React.Component {
       </div>
     )
    }else {
-     return (<div></div>)
+       return(
+             <div>
+             <Breadcrumb size='big'>
+               <Breadcrumb.Section active>Menu</Breadcrumb.Section>
+             </Breadcrumb>
+                <Loader active />
+             </div>
+           )
    }
   }
 }

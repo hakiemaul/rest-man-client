@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Grid,Header,Segment } from 'semantic-ui-react'
 import { scaleLinear } from 'd3-scale'
 import { max } from 'd3-array'
 import { select } from 'd3-selection'

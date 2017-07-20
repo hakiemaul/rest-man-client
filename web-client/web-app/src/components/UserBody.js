@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table,Breadcrumb,Button,Icon, Menu, Loader,Dimmer } from 'semantic-ui-react'
+import { Table,Header,Button, Menu, Loader } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { addAction } from '../actions/addAction'
 import { loadAction } from '../actions/loadAction'
@@ -79,9 +79,7 @@ class UserBody extends React.Component {
     if(users.length===0){
       return(
             <div>
-            <Breadcrumb size='big'>
-              <Breadcrumb.Section active>Users</Breadcrumb.Section>
-            </Breadcrumb>
+            <Header as='h3'>Users</Header>
                     <Loader active />
             </div>
           )
@@ -89,9 +87,7 @@ class UserBody extends React.Component {
     else
     return(
       <div>
-      <Breadcrumb size='big'>
-        <Breadcrumb.Section active>Users</Breadcrumb.Section>
-      </Breadcrumb>
+      <Header as='h3'>Users</Header>
         <div>
           <div style={{marginTop:20,marginBottom:10}}>
             <Link to={{pathname:'/users/add'}}>

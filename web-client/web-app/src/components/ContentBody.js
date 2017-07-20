@@ -20,7 +20,7 @@ import { Switch, Route } from 'react-router-dom'
 
 export default () => {
   return(
-      <div style={{display:'flex'},{width:'100%'}}>
+      <div style={{display:'flex',width:'100%'}}>
         <Switch>
           <Route exact path='/' component = { DashBoard }/>
           <Route exact path='/menu' component ={ MenuBody }/>

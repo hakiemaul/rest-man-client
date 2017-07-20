@@ -1,7 +1,6 @@
 import React from 'react'
 import { Button,Message,Icon, Form,Segment,Header } from 'semantic-ui-react'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
 
 class Login extends React.Component {
 

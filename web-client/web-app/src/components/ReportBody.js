@@ -1,6 +1,6 @@
 import React from 'react'
 import jsPDF from 'jspdf'
-import { Table,Header,Button,Menu} from 'semantic-ui-react'
+import { Table,Header,Button,Menu,Loader} from 'semantic-ui-react'
 import { connect } from 'react-redux'
 
 import { loadAction } from '../actions/loadAction'
@@ -42,17 +42,19 @@ class ReportBody extends React.Component {
     doc.setFontSize(15);
     doc.text(margin,40, 'Transactions');
     doc.setFontSize(10);
-    doc.text(margin,60,'No          ID              Total');
+    doc.text(margin,60,'No               Tanggal                  Total');
 
     for (let i = 0; i < length; i++) {
       let total = transactions[current_num].pay-transactions[current_num].refund
+      let date=Date.parse(transactions[current_num].createdAt)
+      date = new Date(date)
       if(i<9){
         y_height+=enter_space;
-        doc.text(margin,y_height,` ${current_num+1}.        ${transactions[current_num].name}             ${total}`)
+        doc.text(margin,y_height,` ${current_num+1}.        ${date.toDateString()}           Rp. ${total.toLocaleString(['ban', 'id'])}`)
         current_num++
       }else{
         y_height+=enter_space;
-        doc.text(margin,y_height,` ${current_num+1}.      ${transactions[current_num].name}           ${total}`)
+        doc.text(margin,y_height,` ${current_num+1}.      ${date.toDateString()}           Rp.${total.toLocaleString(['ban', 'id'])}`)
         current_num++
         if(y_height >= pageHeight){
           doc.addPage()
@@ -94,8 +96,7 @@ class ReportBody extends React.Component {
       startNo+=1
       let total=data.pay-data.refund
       let date=Date.parse(data.createdAt)
-      date = new Date(1000*date)
-      console.log(date);
+      date = new Date(date)
       if(i<limit){
         return(
           <Table.Row key={i}>
@@ -113,6 +114,8 @@ class ReportBody extends React.Component {
 
     const { limit,activeItem } = this.state
     const { transactions } = this.props
+
+    if(transactions.length>0){
     let pages = transactions.length/limit
     return (
       <div>
@@ -147,7 +150,15 @@ class ReportBody extends React.Component {
           <Button onClick={() =>{this.onPrint('dl')}}>Download Pdf</Button>
         </div>
       </div>
-    )
+    )}
+    else{
+        return(
+              <div>
+              <Header as='h3'>Transactions</Header>
+                 <Loader active />
+              </div>
+            )
+    }
   }
 }
 
