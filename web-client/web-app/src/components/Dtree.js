@@ -27,6 +27,7 @@ class BarChart extends Component {
      const sum = this.props.sum.map(data=>({name:data.name,jumlah:data.jumlah_qty}))
 
      const data = sum.map(d => d.jumlah)
+     const menus = sum.map(d => d.name)
 
      const svg = select(this.svg)
      const width = 500, height = 450, marginLeft = 40
@@ -36,7 +37,7 @@ class BarChart extends Component {
      const y = scaleLinear().domain([0,max(data)]).range([height-marginLeft,marginLeft])
 
      const leftAxis = axisLeft()
-     const bottomAxis = axisBottom()
+     const bottomAxis = axisBottom().ticks(menus.length).tickFormat((d,i) => menus[i])
 
       svg.selectAll('rect')
       .data(data)
@@ -44,34 +45,30 @@ class BarChart extends Component {
       .append('rect')
       .attr('x',(d,i) => marginLeft + xscale(i))
       .attr('y',d => height - yscale(d) - marginLeft)
-      .attr('width',i => xscale(1)-5)
+      .attr('width',i => xscale(1)-sum.length)
       .attr('height',d => yscale(d))
       .attr('fill',this.state.color)
-
-      svg.append('g')
-      .attr('class','leftaxis')
-      .attr('transform',`translate(${marginLeft})`)
-      .call(leftAxis.scale(y))
 
       svg.append('g')
       .attr('class','bottomaxis')
       .attr('transform',`translate(${marginLeft},${height-marginLeft})`)
       .call(bottomAxis.scale(x))
 
+      svg.selectAll('.tick').attr('transform', (d, i) => `translate(${(d * xscale(1)-sum.length) + ((xscale(1)-sum.length) / 2)  },0)`);
+
+      svg.append('g')
+      .attr('class','leftaxis')
+      .attr('transform',`translate(${marginLeft})`)
+      .call(leftAxis.scale(y))
    }
 
 
   render() {
-        return(
-        <Segment raised>
-          <Grid>
-            <Grid.Column>
+        return(<div>
               <svg ref={svg => this.svg = svg}
                 width={'100%'} height={435}>
               </svg>
-            </Grid.Column>
-          </Grid>
-        </Segment>
+        </div>
       )
      }
 }

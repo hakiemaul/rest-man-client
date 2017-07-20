@@ -1,9 +1,13 @@
 import React from 'react'
-import { Button, Form,Breadcrumb } from 'semantic-ui-react'
+import { Button, Form,Breadcrumb,Dropdown } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { addAction } from '../actions/addAction'
+
+const kat = [{ text: 'Admin',value:1,},
+             { text: 'waiters', value:2},
+             { text: 'cashier', value:3}]
 
 class UserAdd extends React.Component {
 
@@ -19,17 +23,8 @@ class UserAdd extends React.Component {
     this.props.history.push('/users');
   }
 
-  handleChange(e,type){
-    if(type==='username'){
-
-      this.setState({username:e.target.value})
-    }else if(type==='role'){
-
-      this.setState({role:e.target.value})
-    }else {
-      console.log('error');
-    }
-  }
+  handleChange = (e) => this.setState({username:e.target.value})
+  handleChangeDropDown= (data) => this.setState({role:data.value})
 
   render(){
     return (
@@ -45,12 +40,12 @@ class UserAdd extends React.Component {
           <Form onSubmit={(e)=>this.handleSubmit(e)}>
             <Form.Field >
               <label>Name</label>
-              <input onChange={(e) => { this.handleChange(e,'name') }} value={this.state.name} placeholder='Name' />
+              <input required onChange={(e) => { this.handleChange(e,'name') }} value={this.state.name} placeholder='Name' />
             </Form.Field>
-            <Form.Field>
-              <label>category</label>
-              <input onChange={(e) => { this.handleChange(e,'category') }} value = { this.state.category } placeholder='category' />
-            </Form.Field>
+              <Form.Field>
+                <label>Role</label>
+                <Dropdown onChange={(e,data) => { this.handleChangeDropDown(data) }} value={this.state.role} placeholder='Role' fluid selection options={kat} />
+              </Form.Field>
                 <Button type='submit'>Add</Button>
           </Form>
         </div>

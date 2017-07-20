@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { Segment,List,Image,Header,Container,Grid,Dropdown } from 'semantic-ui-react'
+import { Segment,List,Image,Header,Container,Grid,Dropdown,Button,Modal,Icon,Item,Loader,Dimmer } from 'semantic-ui-react'
 import InfiniteCalendar from 'react-infinite-calendar';
 import 'react-infinite-calendar/styles.css';
 import axios from 'axios';
@@ -22,7 +22,7 @@ class Dasboard extends React.Component {
 
   constructor(){
     super()
-    this.state={sum:'',today:'', is_weekly:false}
+    this.state={sum:[],today:'',sugestionMenu:[],is_weekly:false,is_loading:true}
   }
 
   handleSelected(date){
@@ -31,18 +31,20 @@ class Dasboard extends React.Component {
     var yyyy = date.getFullYear();
     var time = `${yyyy}-0${mm}-${dd}`
 
+    this.setState({is_loading:true})
+
     if(this.state.is_weekly){
       console.log('masuk coy');
 
     axios.post(`${host}/report/weekly`,{
       date:time
     })
-    .then(respone => this.setState({sum:respone.data.sum}))
+    .then(response => this.setState({sum:response.data.sum,sugestionMenu:response.data.sugestionMenu,is_loading:false}))
     }else {
       axios.post(`${host}/report/daily`,{
         date:time
       })
-      .then(respone => this.setState({sum:respone.data.sum}))
+      .then(response => this.setState({sum:response.data.sum,is_loading:false}))
     }
     console.log(this.state.sum);
     console.log(this.state.is_weekly);
@@ -50,7 +52,7 @@ class Dasboard extends React.Component {
 
   componentDidMount(){
     axios.get(`${host}/report/current`)
-    .then(respone => this.setState({sum:respone.data.sum}))
+    .then(respone => this.setState({sum:respone.data.sum,is_loading:false}))
   }
 
   handleChange(e,data){
@@ -95,33 +97,104 @@ class Dasboard extends React.Component {
    }))
   }
 
+  renderSugestion = () =>{
+    return (<div>
+        <Button
+          basic
+          color='green'
+          content='Suggestion'
+          icon='inbox'
+          label={{ as: 'a', basic: true, color: 'blue', pointing: 'left', content:`${this.state.sugestionMenu.length}` }}
+        />
+      </div>)
+   }
+
+
+   ModalSuggestionMenu = () =>{
+
+     return (
+     <Modal trigger={this.renderSugestion()} triggerClose={true} >
+       <Modal.Header>New Suggestions</Modal.Header>
+       <Modal.Content image scrolling>
+         <Modal.Description style={{width:'100%'}}>
+           <div style={{display:'flex',flexDirection:'row',flexWrap:'wrap',justifyContent:'space-around'}}>
+           <Item.Group style={{width:'100%'}}>
+           {this.state.sugestionMenu.map((data,i) =>(
+             <Item style={{width:'30%'}}>
+               <Item.Image size='tiny' src={data.image} />
+
+               <Item.Content>
+                 <Item.Header as='Judul'>{data.label}</Item.Header>
+                 <Item.Meta>Recipe</Item.Meta>
+                 <Item.Description>
+                  <List bulleted>
+                     {data.ingredient.map(d => <List.Item>{d}</List.Item>)}
+                  </List>
+                 </Item.Description>
+                 <Item.Extra href={data.url}><Icon name='linkify' />{data.url}</Item.Extra>
+               </Item.Content>
+             </Item>))}
+           </Item.Group>
+            </div>
+         </Modal.Description>
+       </Modal.Content>
+       <Modal.Actions>
+         <Button primary>
+           oke
+         </Button>
+       </Modal.Actions>
+     </Modal>
+   )
+ }
+
+
   render(){
-    const { sum } = this.state
+    const { sum,is_weekly,is_loading } = this.state
     if(sum){
     return(
       <div>
         <Header as='h3'>Dasboard</Header>
-        <Dropdown selection  options={dateOptions} value={this.state.is_weekly} onChange={(e,data) => this.handleChange(e,data)} />
         <Container style={{display:'flex'}}>
           <Grid columns={2} style={{width:'100%'}}>
             <Grid.Column>
             <Segment raised style={{width:330}}>
+                <Dropdown style={{marginBottom:'2%'}} selection  options={dateOptions} value={this.state.is_weekly} onChange={(e,data) => this.handleChange(e,data)} />
               {this.renderCalender()}
             </Segment>
-            {(sum.length>0)?
-            (<Segment raised style={{width:330}}>
+            {(!is_loading)?
+            (<div>
+              <Segment raised style={{width:330}}>
             <div>
             <Header as='h3'>Top Three</Header>
                 <List vertical ordered>
                 {this.renderList(sum)}
                 </List>
             </div>
-            </Segment>):null}
+            </Segment>
+              {(is_weekly)?
+              this.ModalSuggestionMenu():null}
+            </div>):<div>
+              <Segment raised style={{width:330}}>
+            <div>
+            <Header as='h3'>Top Three</Header>
+            <Dimmer active inverted>
+                              <Loader>Loading</Loader>
+                            </Dimmer>
+            </div>
+            </Segment>
+
+            </div>}
             </Grid.Column>
-            {(sum.length>0)?
+            {(!is_loading)?
               (<Grid.Column>
-                <Dtree sum={sum} size={[500,700]} style={{height:'100%'}} />
-              </Grid.Column>):null
+                <Segment>
+                  <Dtree sum={sum} />
+                </Segment>
+              </Grid.Column>):<Grid.Column>
+              <Dimmer active inverted>
+                                <Loader>Loading</Loader>
+                              </Dimmer>
+              </Grid.Column>
             }
           </Grid>
 

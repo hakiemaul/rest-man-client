@@ -18,7 +18,7 @@ class ReportBody extends React.Component {
     this.state = {
       order:'',
       activeItem: 1,
-      limit:10
+      limit:5
     }
   }
 
@@ -94,17 +94,20 @@ class ReportBody extends React.Component {
     let startIndex=((+page)*limit)-(limit)
     let startNo = startIndex
     let arr = transactions.filter((data,i)=>(i>=startIndex) ? data:null)
-    let total = 0
 
     return arr.map((data,i) =>{
       startNo+=1
       let total=data.pay-data.refund
+      let date=Date.parse(data.createdAt)
+      date = new Date(1000*date)
+      console.log(date);
       if(i<limit){
         return(
           <Table.Row key={i}>
           <Table.Cell >{startNo}</Table.Cell>
-          <Table.Cell >{data.name}</Table.Cell>
-          <Table.Cell >{total}</Table.Cell>
+          <Table.Cell >{data.id_order}</Table.Cell>
+          <Table.Cell >Rp. {total.toLocaleString(['ban', 'id'])}</Table.Cell>
+          <Table.Cell >{date.toString()}</Table.Cell>
           </Table.Row>
         )
       }else return null
@@ -118,7 +121,7 @@ class ReportBody extends React.Component {
     let pages = transactions.length/limit
     return (
       <div>
-      <Header as='h3'>Report</Header>
+      <Header as='h3'>Transactions</Header>
         <div>
           <Dropdown placeholder='Select ordered by' value={this.state.order} selection options={timeOrder}
             onChange={(e,data) => {this.handleChange(e,data)}}
@@ -129,9 +132,10 @@ class ReportBody extends React.Component {
           <Table fixed celled>
             <Table.Header>
               <Table.Row>
-              <Table.HeaderCell textAlign={'center'}>No</Table.HeaderCell>
+              <Table.HeaderCell>No</Table.HeaderCell>
               <Table.HeaderCell>Id</Table.HeaderCell>
               <Table.HeaderCell>Total</Table.HeaderCell>
+              <Table.HeaderCell>Date</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
 

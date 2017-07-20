@@ -41,14 +41,7 @@ class SidebarLeftPush extends Component {
             <Link to={{pathname:'/report'}}>
               <Menu.Item name='report'>
                 <Icon name='bar chart' />
-                Report
-              </Menu.Item>
-            </Link>
-
-            <Link to={{pathname:'/settings'}}>
-              <Menu.Item name='Settings'>
-                <Icon name='settings' />
-                Settings
+                Transactions
               </Menu.Item>
             </Link>
 

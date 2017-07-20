@@ -22,12 +22,6 @@ class MenuBody extends React.Component {
 
   }
 
-  // componentWillUpdate(){
-  //   this.setState({menu:this.props.menu})
-  //   console.log('masuk delete');
-  //   console.log(this.state.menu);
-  // }
-
   handleItemClick = (e, { name }) => this.setState({ activeItem: +name })
 
   handlePrev = () => this.setState({ activeItem: this.state.activeItem-1 })
@@ -53,7 +47,6 @@ class MenuBody extends React.Component {
 
   renderRow(limit){
     const { menu } = this.props
-    // const { menu } = this.state
     let page = this.state.activeItem
     let startIndex=((+page)*limit)-(limit)
     let startNo = startIndex
@@ -69,7 +62,7 @@ class MenuBody extends React.Component {
             <Table.Cell>{data.name}</Table.Cell>
             <Table.Cell>{data.description}</Table.Cell>
             <Table.Cell>{(data.id_category===1)?'makanan':'minuman'}</Table.Cell>
-            <Table.Cell>{data.price}</Table.Cell>
+            <Table.Cell>Rp. {data.price.toLocaleString(['ban', 'id'])}</Table.Cell>
             <Table.Cell textAlign={'center'}>
             <Link to={{pathname:`/menu/edit/${data.id}`}} >
               <Button circular inverted color='orange'>edit</Button>

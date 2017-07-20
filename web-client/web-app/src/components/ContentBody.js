@@ -21,7 +21,7 @@ import { Switch, Route } from 'react-router-dom'
 
 export default () => {
   return(
-      <main>
+      <div style={{display:'flex'},{width:'100%'}}>
         <Switch>
           <Route exact path='/' component = { DashBoard }/>
           <Route exact path='/login' component ={ Login }/>
@@ -35,6 +35,6 @@ export default () => {
           <Route path='/settings' component ={ SettingBody }/>
           <Route component={ Page404 }/>
         </Switch>
-      </main>
+      </div>
   )
 }

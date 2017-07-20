@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const host = 'http://ec2-52-77-252-189.ap-southeast-1.compute.amazonaws.com:3000'
 const routes= {
-  listUsers : `${host}/user`,
+  listUsers : `${host}/employee`,
   listMenu : `${host}/menu`,
   listTransaction : `${host}/transaction`,
   listReportCurrent : `${host}/report/current`,
@@ -22,7 +22,7 @@ export const loadAction = (params='',data='') => {
     payload=axios.get(routes.listMenu)
   }else if(params==='transactions') {
     type='GET_TRANSACTION'
-    payload=axios.get(routes.listReportCurrent)
+    payload=axios.get(routes.listTransaction)
   }else if(params==='report') {
     type= 'GET_REPORT'
     payload= axios.get(routes.listReportCurrent)

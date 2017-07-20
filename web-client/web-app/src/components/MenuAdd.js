@@ -6,13 +6,15 @@ import firebase from 'firebase';
 import FileUploader from 'react-firebase-file-uploader'
 
 
+
 import { addAction } from '../actions/addAction'
 
 const kat = [{ text: 'Makanan',value:1,},
                    { text: 'Minuman', value:2}]
 
+require('dotenv').config()
  const config = {
-   apiKey: "AIzaSyCAuoNlPwgixCfJlra2vb8bS0UTYPo55Zc",
+   apiKey: process.env.FIREBASE_API_KEY,
     authDomain: "restman-e8740.firebaseapp.com",
     databaseURL: "https://restman-e8740.firebaseio.com",
     projectId: "restman-e8740",
@@ -84,11 +86,11 @@ const kat = [{ text: 'Makanan',value:1,},
        <Form onSubmit={(e)=>this.handleSubmit(e)}>
          <Form.Field >
            <label>Name</label>
-           <input onChange={(e) => { this.handleChange(e,'name') }} value={this.state.name} type='text' placeholder='Name' />
+           <input required onChange={(e) => { this.handleChange(e,'name') }} value={this.state.name} type='text' placeholder='Name' />
          </Form.Field>
          <Form.Field >
            <label>Name</label>
-           <input onChange={(e) => { this.handleChange(e,'description') }} value={this.state.description} type='text' placeholder='Description' />
+           <input required onChange={(e) => { this.handleChange(e,'description') }} value={this.state.description} type='text' placeholder='Description' />
          </Form.Field>
          <Form.Field>
            <label>Category</label>
@@ -96,7 +98,7 @@ const kat = [{ text: 'Makanan',value:1,},
          </Form.Field>
          <Form.Field >
            <label>Harga</label>
-           <input onChange={(e) => { this.handleChange(e,'price') }} value={+this.state.price} type='number' step='10000' placeholder='harga' />
+           <input required onChange={(e) => { this.handleChange(e,'price') }} value={+this.state.price} type='number' step='10000' placeholder='harga' />
          </Form.Field>
          <Form.Field>
          <FileUploader

@@ -2415,7 +2415,7 @@ dot-prop@^3.0.0:
   dependencies:
     is-obj "^1.0.0"
 
-dotenv@4.0.0:
+dotenv@4.0.0, dotenv@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-4.0.0.tgz#864ef1379aced55ce6f95debecdce179f7a0cd1d"
 
@@ -3121,6 +3121,10 @@ flat-cache@^1.2.1:
 flatten@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/flatten/-/flatten-1.0.2.tgz#dae46a9d78fbe25292258cc1e780a41d95c03782"
+
+flexboxgrid@^6.3.0:
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/flexboxgrid/-/flexboxgrid-6.3.1.tgz#e99898afc07b7047722bb81a958a5fba4d4e20fd"
 
 follow-redirects@^1.2.3:
   version "1.2.4"
@@ -5675,7 +5679,7 @@ prop-types@15.5.8:
   dependencies:
     fbjs "^0.8.9"
 
-prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.7:
+prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.5.8:
   version "15.5.10"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.10.tgz#2797dfc3126182e3a95e3dfbb2e893ddd7456154"
   dependencies:
@@ -5922,6 +5926,13 @@ react-firebase-image-uploader@^1.1.0:
   resolved "https://registry.yarnpkg.com/react-firebase-image-uploader/-/react-firebase-image-uploader-1.1.0.tgz#fffeb9230912a03f39dc4d4d77e08d07bb72b8ff"
   dependencies:
     uuid "^2.0.3"
+
+react-flexbox-grid@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/react-flexbox-grid/-/react-flexbox-grid-1.1.3.tgz#4e61c7ff68d1eb1ae131c01a7c29b39803c54a0e"
+  dependencies:
+    flexboxgrid "^6.3.0"
+    prop-types "^15.5.8"
 
 react-infinite-calendar@^2.3.1:
   version "2.3.1"
