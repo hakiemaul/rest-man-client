@@ -39,12 +39,21 @@ class Dasboard extends React.Component {
     axios.post(`${host}/report/weekly`,{
       date:time
     })
-    .then(response => this.setState({sum:response.data.sum,sugestionMenu:response.data.sugestionMenu,is_loading:false}))
+    .then(response => this.setState({sum:response.data.sum,sugestionMenu:response.data.sugestionMenu,totalTrx:response.data.totalTrx,is_loading:false}))
     }else {
-      axios.post(`${host}/report/daily`,{
-        date:time
-      })
-      .then(response => this.setState({sum:response.data.sum,is_loading:false}))
+      var currentDate = new Date().toDateString()
+      console.log(date.toDateString(),currentDate)
+      if(date.toDateString()===currentDate){
+        console.log('masuk asini');
+        axios.get(`${host}/report/current`)
+        .then(response => this.setState({sum:response.data.sum,totalTrx:response.data.totalTrx,is_loading:false}))
+      }
+      else {
+        axios.post(`${host}/report/daily`,{
+          date:time
+        })
+        .then(response => this.setState({sum:response.data.sum,totalTrx:response.data.totalTrx,is_loading:false}))
+      }
     }
     console.log(this.state.sum);
     console.log(this.state.is_weekly);
@@ -52,7 +61,7 @@ class Dasboard extends React.Component {
 
   componentDidMount(){
     axios.get(`${host}/report/current`)
-    .then(respone => this.setState({sum:respone.data.sum,is_loading:false}))
+    .then(respone => this.setState({sum:respone.data.sum,totalTrx:respone.data.totalTrx,is_loading:false}))
   }
 
   handleChange(e,data){
@@ -87,7 +96,6 @@ class Dasboard extends React.Component {
       return(sum.map((data,i) =>{
       if(i<3){
        return (<List.Item key={data.id}>
-         <Image avatar src='http://www.pngall.com/wp-content/uploads/2016/03/Food.png' />
          <List.Content>
            <List.Header>{data.name}</List.Header>
            Total: {data.jumlah_qty}
@@ -114,7 +122,7 @@ class Dasboard extends React.Component {
 
      return (
      <Modal trigger={this.renderSugestion()} triggerClose={true} >
-       <Modal.Header>New Suggestions</Modal.Header>
+       <Modal.Header>New Menu Suggestions</Modal.Header>
        <Modal.Content image scrolling>
          <Modal.Description style={{width:'100%'}}>
            <div style={{display:'flex',flexDirection:'row',flexWrap:'wrap',justifyContent:'space-around'}}>
@@ -149,7 +157,8 @@ class Dasboard extends React.Component {
 
 
   render(){
-    const { sum,is_weekly,is_loading } = this.state
+    const { sum,is_weekly,is_loading,totalTrx } = this.state
+    console.log(this.state);
     if(sum){
     return(
       <div>
@@ -164,14 +173,19 @@ class Dasboard extends React.Component {
             {(!is_loading)?
             (<div>
               <Segment raised style={{width:330}}>
-            <div>
-            <Header as='h3'>Top Three</Header>
-                <List vertical ordered>
-                {this.renderList(sum)}
-                </List>
-            </div>
+              {(sum.length>0)?
+                <div>
+                <Header as='h3'>Top Three</Header>
+                    <List vertical ordered>
+                    {this.renderList(sum)}
+                    </List>
+                </div>:<div>
+                <Header as='h3'>Empty Data</Header>
+
+                </div>
+              }
             </Segment>
-              {(is_weekly)?
+              {(is_weekly&&sum.length>0)?
               this.ModalSuggestionMenu():null}
             </div>):<div>
               <Segment raised style={{width:330}}>
@@ -187,9 +201,16 @@ class Dasboard extends React.Component {
             </Grid.Column>
             {(!is_loading)?
               (<Grid.Column>
-                <Segment>
-                  <Dtree sum={sum} />
-                </Segment>
+                {(sum.length>0) ?
+                  <Segment>
+                   <Header size='huge'>Total: Rp. {totalTrx.total.toLocaleString(['ban', 'id'])}</Header>
+                    <Dtree sum={sum} />
+                  </Segment> :
+
+                  <Segment style={{display:'flex',justifyContent:'center'}}>
+                  <Header size='huge'>EMPTY DATA</Header>
+                  </Segment>
+                }
               </Grid.Column>):<Grid.Column>
               <Dimmer active inverted>
                                 <Loader>Loading</Loader>

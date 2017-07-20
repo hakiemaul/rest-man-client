@@ -66,7 +66,7 @@ class BarChart extends Component {
   render() {
         return(<div>
               <svg ref={svg => this.svg = svg}
-                width={'100%'} height={435}>
+                width={'100%'} height={432}>
               </svg>
         </div>
       )
