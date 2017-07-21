@@ -203,7 +203,7 @@ class Transaction extends React.Component {
         }}>
           <Image
             style={{width: 240, height: 255}}
-            source={{uri: 'https://00e9e64bac702313a2b47e57885fecd0e0f80d453690dde4a1-apidata.googleusercontent.com/download/storage/v1/b/rest-man-bucket/o/image2.png?qk=AD5uMEuc0PcI95Z34cSy3DzV0e-PGVlFi7sJUHuHPpiaE-NJQzdt8GtOEBUp8Q6eWMBbbtUg69_3OnwR20DdzBmLgu1BMg1wFMGx6W2TIY1_2JikDhV55De0_8ynWDRZSyl_xVd0dGFmQKZtzvGrdSpNlVOSg71K5NFulzSeghGapLJZi1MVbjZKsGDHm9ATaCaQtIb0pYvxzuZ-uebmBJxvnTMMLRNtI-u3XC-FIXOic1kebS4SiehyOpnmGHF6R5Bm9fh_TWuDSRTOwBkq2Xzje2PU3oFwCmhDXXRWBkqs5-XYXQX16MN-BToKizahaOK9YGTqjYOpPdvGJkwo6z2daUOZZZkGQgvrVtaBibatNFN5js78aTmtsmrQCOi_nTBZSYYSJzBVjdclc8l97WBWdjsuK1nZ6W8OHU-wzm_JalXCvyWONxRgMLTuWbVUI7bHYK8ECWJjKlJ1hZKQpbtyi2B1Wr6PIo82uJ2ia4AUTp7wG2jqtxDE59GoqV24X9rfFb8PN7tNWAH3Lkb9sbHCCFBLMVWV7-YQVrJ2J2fxJrG9FXmAuKJQpujNwhEXDLCxdsh7PnUa7QIgCTthXYOoEsn5YVk5ZfX_edLracUpbjoItBSiiqJCcdWlClh3xhS024lBdJSonzhsitRBzGZT2a3w5KBpwGo1C-aXBGJlwWMYWDzBM4oY168OO39b_UowksmTTf-bGSj0D6kUivJEQgw5KugqXEdLuh3d_WrUg-CpPEvV6ADLBAJ4FKvYFuGlo-UarSMVD6sBld3XdaVPSprsDnnTng'}}
+            source={require('../assets/logo.png')}
           />
           <ActivityIndicator size='large' />
         </View>

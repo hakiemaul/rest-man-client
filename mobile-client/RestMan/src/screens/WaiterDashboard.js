@@ -61,7 +61,7 @@ class WaiterDashboard extends React.Component {
   }
 
   _renderItem = ({ item }) => (
-    <Image source={{ uri: 'https://s-media-cache-ak0.pinimg.com/originals/c3/49/cc/c349cc154ad89ec4b9a1fe9071026800.jpg' }} style={{ width: 300, borderRadius: 30, height: 82, marginBottom: 10, opacity: 0.7, backgroundColor: 'transparent' }}>
+    <Image source={require('../assets/occupied.jpg')} style={{ width: 300, borderRadius: 30, height: 82, marginBottom: 10, opacity: 0.7, backgroundColor: 'transparent' }}>
     <TouchableOpacity
       style={{ padding: 20, backgroundColor: '#253951' }}
       onPress={() => this.props.navigation.navigate('Detail', { name: item.name, order: item.order })}>
@@ -72,7 +72,7 @@ class WaiterDashboard extends React.Component {
   )
 
   _renderFree = ({ item }) => (
-    <Image source={{ uri: 'http://www.table50roanoke.com/wp-content/themes/fresh-editorial/images/slideshow/Table-50_offers_finest_wines.jpg' }} style={{ width: 300, borderRadius: 30, height: 82, marginBottom: 10, opacity: 0.7, backgroundColor: 'transparent' }}>
+    <Image source={require('../assets/free.jpg')} style={{ width: 300, borderRadius: 30, height: 82, marginBottom: 10, opacity: 0.7, backgroundColor: 'transparent' }}>
     <TouchableOpacity
       style={{ padding: 20, backgroundColor: '#253951' }}
       onPress={() => this._addOrder(item.name)}>
