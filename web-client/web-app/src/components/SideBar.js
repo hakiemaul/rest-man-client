@@ -20,7 +20,7 @@ class SidebarLeftPush extends Component {
             <Link to={{pathname:'/'}}>
               <Menu.Item name='Dasboard'>
                 <Icon name='home' />
-                Dasboard
+                Dashboard
               </Menu.Item>
             </Link>
 
