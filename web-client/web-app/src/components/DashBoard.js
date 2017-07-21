@@ -158,7 +158,7 @@ class Dasboard extends React.Component {
     if(sum){
     return(
       <div>
-        <Header as='h3'>Dasboard</Header>
+        <Header as='h3'>Dashboard</Header>
         <Container style={{display:'flex'}}>
           <Grid columns={2} style={{width:'100%'}}>
             <Grid.Column>
@@ -171,7 +171,7 @@ class Dasboard extends React.Component {
               <Segment raised style={{width:330}}>
               {(sum.length>0)?
                 <div>
-                <Header as='h3'>Top Three</Header>
+                <Header as='h3'>Top Sales</Header>
                     <List vertical ordered>
                     {this.renderList(sum)}
                     </List>
@@ -186,7 +186,7 @@ class Dasboard extends React.Component {
             </div>):<div>
               <Segment raised style={{width:330}}>
             <div>
-            <Header as='h3'>Top Three</Header>
+            <Header as='h3'>Top Sales</Header>
               <Dimmer active inverted>
                 <Loader>Loading</Loader>
               </Dimmer>
