@@ -61,23 +61,23 @@ class WaiterDashboard extends React.Component {
   }
 
   _renderItem = ({ item }) => (
-    <Image source={require('../assets/occupied.jpg')} style={{ width: 300, borderRadius: 30, height: 82, marginBottom: 10, opacity: 0.7, backgroundColor: 'transparent' }}>
+    <Image source={require('../assets/occupied.jpg')} style={{ width: 300, borderRadius: 30, height: 90, marginBottom: 10, opacity: 0.7, backgroundColor: 'transparent' }}>
     <TouchableOpacity
       style={{ padding: 20, backgroundColor: '#253951' }}
       onPress={() => this.props.navigation.navigate('Detail', { name: item.name, order: item.order })}>
-      <Text style={{...styles.text, color: '#fff'}}>{item.name}</Text>
-      <Text style={{...styles.text, fontSize: 10, color: '#fff' }}>Klik untuk lihat detail dan edit</Text>
+      <Text style={{...styles.text, color: '#fff', fontSize: 24, fontWeight: 'bold'}}>{item.name}</Text>
+      <Text style={{...styles.text, fontSize: 16, color: '#fff' }}>Klik untuk lihat detail dan edit</Text>
     </TouchableOpacity>
     </Image>
   )
 
   _renderFree = ({ item }) => (
-    <Image source={require('../assets/free.jpg')} style={{ width: 300, borderRadius: 30, height: 82, marginBottom: 10, opacity: 0.7, backgroundColor: 'transparent' }}>
+    <Image source={require('../assets/free.jpg')} style={{ width: 300, borderRadius: 30, height: 90, marginBottom: 10, opacity: 0.7, backgroundColor: 'transparent' }}>
     <TouchableOpacity
       style={{ padding: 20, backgroundColor: '#253951' }}
       onPress={() => this._addOrder(item.name)}>
-      <Text style={{...styles.text, color: '#fff', opacity: 1}}>{item.name}</Text>
-      <Text style={{...styles.text, fontSize: 10, color: '#fff', opacity: 1 }}>Klik untuk mulai pesanan</Text>
+      <Text style={{...styles.text, color: '#fff', fontSize: 24, fontWeight: 'bold'}}>{item.name}</Text>
+      <Text style={{...styles.text, fontSize: 16, color: '#fff', opacity: 1 }}>Klik untuk mulai pesanan</Text>
     </TouchableOpacity>
     </Image>
   )
